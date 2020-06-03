@@ -12,6 +12,7 @@ from .execution import Execution
 from .hue import Hue
 from .hdmi import Hdmi
 from .errors import raise_error, RequestError, Unauthorized
+from .hsb_cacert import HSB_CACERT
 
 MIN_API_LEVEL = 4
 
@@ -77,9 +78,7 @@ class HueSyncBox:
         """
         Get a clientsession that is tuned for communication with the Hue Syncbox
         """
-        pem_file = pathlib.Path(__file__).parent.absolute() / "hsb_cacert.pem"
-
-        context = ssl.create_default_context(cafile=pem_file)
+        context = ssl.create_default_context(cadata=HSB_CACERT)
         context.hostname_checks_common_name = True
 
         connector = aiohttp.TCPConnector(

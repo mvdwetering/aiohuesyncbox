@@ -11,7 +11,7 @@ async def main(args):
     registration_info = None
 
     if args.token:
-        box = HueSyncBox(args.host, args.id, args.token)
+        box = HueSyncBox(args.host, args.id, access_token=args.token)
         if not await box.is_registered():
             await box.close()
             print("Token is not valid")

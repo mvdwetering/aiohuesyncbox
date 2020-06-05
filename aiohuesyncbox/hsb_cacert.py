@@ -1,3 +1,5 @@
+"""Contents of hsb_cacert.pem file"""
+
 HSB_CACERT = """
 -----BEGIN CERTIFICATE-----
 MIIBwDCCAWagAwIBAgIBATAKBggqhkjOPQQDAjA2MQswCQYDVQQGEwJOTDEUMBIG

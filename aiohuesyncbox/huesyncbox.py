@@ -171,7 +171,7 @@ class HueSyncBox:
                 data = None
                 if res.content_type == 'application/json':
                     data = await res.json()
-                    logger.debug(f'data: {data}')
+                    logger.debug(f'{res.status}: {data}')
                     if res.status != 200:
                         _raise_on_error(data)
                 return data

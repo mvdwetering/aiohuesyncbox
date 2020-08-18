@@ -169,7 +169,7 @@ class HueSyncBox:
                 headers['Authorization'] = f'Bearer {self._access_token}'
             logger.debug('%s, %s, %s' % (method, url, data))
             async with self._clientsession.request(method, url, json=data, headers=headers) as resp:
-                logger.debug('%s, %s' % (resp.status, await resp.text()))
+                logger.debug('%s, %s' % (resp.status, await resp.text('utf-8')))
 
                 data = None
                 if resp.content_type == 'application/json':

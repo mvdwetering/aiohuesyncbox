@@ -29,7 +29,7 @@ class Execution:
         self._syncmode_music = SyncMode(self._raw['music'])
 
     async def _put(self, data):
-        await self._request('put', '/execution', json=data)
+        await self._request('put', '/execution', data=data)
 
     @property
     def sync_active(self):

@@ -84,6 +84,7 @@ class HueSyncBox:
         connector = aiohttp.TCPConnector(
             enable_cleanup_closed=True, # Home Assistant sets it so lets do it also
             ssl=context,
+            limit_per_host=1,
             resolver=CommonNameInserterResolver(self._id) # Use custom resolver to get certificate validation on common_name working
         )
 
@@ -157,7 +158,7 @@ class HueSyncBox:
             pass
         return self._host
 
-    async def request(self, method, path, json=None, auth=True):
+    async def request(self, method, path, data=None, auth=True):
         """Make a request to the API."""
 
         url = f'https://{self._mangled_host()}:{self._port}{self._path}/v1{path}'
@@ -166,13 +167,14 @@ class HueSyncBox:
             headers = {'Content-Type': 'application/json'}
             if auth and self._access_token:
                 headers['Authorization'] = f'Bearer {self._access_token}'
-            logger.debug(f'{method}, {url}, {json}')
-            async with self._clientsession.request(method, url, json=json, headers=headers) as res:
+            logger.debug('%s, %s, %s' % (method, url, data))
+            async with self._clientsession.request(method, url, json=data, headers=headers) as resp:
+                logger.debug('%s, %s' % (resp.status, await resp.text()))
+
                 data = None
-                if res.content_type == 'application/json':
-                    data = await res.json()
-                    logger.debug(f'{res.status}: {data}')
-                    if res.status != 200:
+                if resp.content_type == 'application/json':
+                    data = await resp.json()
+                    if resp.status != 200:
                         _raise_on_error(data)
                 return data
         except aiohttp.client_exceptions.ClientError as err:

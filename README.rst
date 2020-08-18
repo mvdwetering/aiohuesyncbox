@@ -10,7 +10,7 @@ Installation
 
 .. code-block:: bash
 
-    pip3 install aiohuesyncbox
+    python3 -m pip install aiohuesyncbox
 
 
 Usage
@@ -46,17 +46,18 @@ Registration
     while not registration_info:
         try:
             registration_info = await box.register("Your application", "Your device")
-            time.sleep(1)
         except InvalidState:
             # Indicates the button was not pressed
             pass
+        time.sleep(1)
 
     # Save registration_info somewhere and use the 'access_token' when instantiating HueSyncBox next time
     print(registration_info)
 
     # Unregister by registration ID.
-    # HueSyncBox needs to use the associated access_token to execute this request.
+    # HueSyncBox needs to use the associated `access_token` to execute this request.
     await box.unregister(registration_info['registration_id'])
+
 
 Basic usage
 -----------
@@ -78,7 +79,7 @@ Basic usage
     # Turn the box on, start syncing with video mode on input 4
     await box.execution.set_state(sync_active=True, mode="video", hdmi_source="input4")
 
-    # Call update() to update with latest status of the box
+    # Call update() to update with latest status from the box
     await box.execution.update()
     print(box.execution.sync_active)
     print(box.execution.mode)

@@ -104,12 +104,12 @@ class Execution:
 
     async def cycle_sync_mode(self, next=True):
         """Cycle through sync modes."""
-        data = {'cycleSyncMode': 'next' if next else 'prev'}
+        data = {'cycleSyncMode': 'next' if next else 'previous'}
         await self._put(data)
 
     async def cycle_hdmi_source(self, next=True):
         """Cycle through HDMI sources."""
-        data = {'cycleHdmiSource': 'next' if next else 'prev'}
+        data = {'cycleHdmiSource': 'next' if next else 'previous'}
         await self._put(data)
 
     async def increment_brightness(self, step):
@@ -119,7 +119,7 @@ class Execution:
 
     async def cycle_intensity(self, next=True):
         """Cycle through intensities of current mode if syncing."""
-        data = {'cycleIntensity': 'next' if next else 'prev'}
+        data = {'cycleIntensity': 'next' if next else 'previous'}
         await self._put(data)
 
     async def set_intensity(self, intensity):

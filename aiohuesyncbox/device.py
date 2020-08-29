@@ -45,4 +45,6 @@ class Device():
         return self._raw['firmwareVersion']
 
     async def update(self):
-        self.raw = await self._request('get', '/device')
+        response = await self._request('get', '/device')
+        if response:
+            self._raw = response

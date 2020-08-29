@@ -76,5 +76,7 @@ class Hdmi:
         return self._output
 
     async def update(self):
-        self._raw = await self._request('get', '/hdmi')
-        self._update_inputs_and_output()
+        response = await self._request('get', '/hdmi')
+        if response:
+            self._raw = response
+            self._update_inputs_and_output()

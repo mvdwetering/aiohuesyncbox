@@ -89,5 +89,7 @@ class Hue:
         await self._request('put', f'hue/groups/{id}', data=data)
 
     async def update(self):
-        self._raw = await self._request('get', '/hue')
-        self._groups = Hue._build_groups(self._raw)
+        response = await self._request('get', '/hue')
+        if response:
+            self._raw = response
+            self._groups = Hue._build_groups(self._raw)

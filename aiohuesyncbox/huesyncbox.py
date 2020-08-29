@@ -84,7 +84,7 @@ class HueSyncBox:
         connector = aiohttp.TCPConnector(
             enable_cleanup_closed=True, # Home Assistant sets it so lets do it also
             ssl=context,
-            limit_per_host=1,
+            limit_per_host=1, # Syncbox can handle a limited amount of connections, only take what we need
             resolver=CommonNameInserterResolver(self._id) # Use custom resolver to get certificate validation on common_name working
         )
 
@@ -110,15 +110,16 @@ class HueSyncBox:
         instance_name : The specific instance of your application, e.g. a specific device the application is running on
         use_registered_token: When true use the token (if obtained) for subsequent requests
         """
-        result = await self.request('post', '/registrations', {
+        response = await self.request('post', '/registrations', {
             "appName": application_name,
             "instanceName": instance_name
         }, auth=False) # Make sure to _not_ use a possibly invalid token as it will be rejected
 
-        if result:
+        info = None
+        if response:
             info = {
-                'registration_id': result['registrationId'],
-                'access_token': result['accessToken']
+                'registration_id': response['registrationId'],
+                'access_token': response['accessToken']
             }
 
             if use_registered_token:
@@ -139,11 +140,12 @@ class HueSyncBox:
         await self._clientsession.close()
 
     async def update(self):
-        result = await self.request('get', '')
-        self.device = Device(result['device'], self.request)
-        self.execution = Execution(result['execution'], self.request)
-        self.hue = Hue(result['hue'], self.request)
-        self.hdmi = Hdmi(result['hdmi'], self.request)
+        response = await self.request('get', '')
+        if response:
+            self.device = Device(response['device'], self.request)
+            self.execution = Execution(response['execution'], self.request)
+            self.hue = Hue(response['hue'], self.request)
+            self.hdmi = Hdmi(response['hdmi'], self.request)
 
     def _mangled_host(self):
         """
@@ -160,6 +162,11 @@ class HueSyncBox:
 
     async def request(self, method, path, data=None, auth=True):
         """Make a request to the API."""
+
+        if self._clientsession.closed:
+            # Avoid runtime errors when connection is closed.
+            # This solves an issue when Updates were scheduled and HA was shutdown
+            return None
 
         url = f'https://{self._mangled_host()}:{self._port}{self._path}/v1{path}'
 

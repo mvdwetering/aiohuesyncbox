@@ -154,6 +154,8 @@ class Execution:
         await self._put(data)
 
     async def update(self):
-        self._raw = await self._request('get', '/execution')
-        self._update_syncmodes()
+        response = await self._request('get', '/execution')
+        if response:
+            self._raw = response
+            self._update_syncmodes()
 

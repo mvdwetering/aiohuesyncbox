@@ -48,6 +48,9 @@ class Hue:
         attributes = ["bridge_unique_id", "bridge_ip_address", "connection_state", "groups"]
         return generate_attribute_string(self, attributes)
 
+    def __eq__(self, other: object) -> bool:
+        return self._raw == other._raw
+
     @staticmethod
     def _build_groups(raw):
         groups = []

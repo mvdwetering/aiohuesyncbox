@@ -39,6 +39,9 @@ class Hdmi:
         attributes = ["content_specs", "video_sync_supported", "audio_sync_supported", "inputs", "output"]
         return generate_attribute_string(self, attributes)
 
+    def __eq__(self, other: object) -> bool:
+        return self._raw == other._raw
+
     def _update_inputs_and_output(self):
         inputs = []
         for key, value in self._raw.items():

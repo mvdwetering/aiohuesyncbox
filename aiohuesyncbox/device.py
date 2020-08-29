@@ -11,6 +11,9 @@ class Device():
         attributes = ["name", "device_type", "unique_id", "ip_address", "api_level", "firmware_version"]
         return generate_attribute_string(self, attributes)
 
+    def __eq__(self, other: object) -> bool:
+        return self._raw == other._raw
+
     @property
     def name(self):
         """Friendly name of the device."""

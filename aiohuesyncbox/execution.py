@@ -23,6 +23,9 @@ class Execution:
         attributes = ["sync_active", "hdmi_active", "mode", "last_sync_mode", "hdmi_source", "hue_target", "brightness", "video", "game", "music"]
         return generate_attribute_string(self, attributes)
 
+    def __eq__(self, other: object) -> bool:
+        return self._raw == other._raw
+
     def _update_syncmodes(self):
         self._syncmode_video = SyncMode(self._raw['video'])
         self._syncmode_game = SyncMode(self._raw['game'])

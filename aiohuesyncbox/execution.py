@@ -130,7 +130,7 @@ class Execution:
         data = {'intensity': intensity}
         await self._put(data)
 
-    async def set_state(self, sync_active=None, sync_toggle=None, hdmi_active=None, hdmi_active_toggle=None, mode=None, mode_cycle=None, hdmi_source=None, hdmi_source_cycle=None, brightness=None, brightness_step=None, video=None, game=None, music=None, intensity=None, intensity_cycle=None):
+    async def set_state(self, sync_active=None, sync_toggle=None, hdmi_active=None, hdmi_active_toggle=None, mode=None, mode_cycle=None, hdmi_source=None, hdmi_source_cycle=None, brightness=None, brightness_step=None, video=None, game=None, music=None, intensity=None, intensity_cycle=None, hue_target=None):
         """Change execution state of huesyncbox."""
         data = {
             key: value for key, value in {
@@ -149,6 +149,7 @@ class Execution:
                 'video': video,
                 'game': game,
                 'music': music,
+                'hueTarget': hue_target,
             }.items() if value is not None
         }
         await self._put(data)

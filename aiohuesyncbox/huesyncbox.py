@@ -1,9 +1,7 @@
-import asyncio
 import ipaddress
 import logging
 import ssl
 import socket
-import pathlib
 
 import aiohttp
 
@@ -171,10 +169,12 @@ class HueSyncBox:
         url = f'https://{self._mangled_host()}:{self._port}{self._path}/v1{path}'
 
         try:
+            logger.debug('%s, %s, %s' % (method, url, data))
+
             headers = {'Content-Type': 'application/json'}
             if auth and self._access_token:
                 headers['Authorization'] = f'Bearer {self._access_token}'
-            logger.debug('%s, %s, %s' % (method, url, data))
+
             async with self._clientsession.request(method, url, json=data, headers=headers) as resp:
                 logger.debug('%s, %s' % (resp.status, await resp.text('utf-8')))
 

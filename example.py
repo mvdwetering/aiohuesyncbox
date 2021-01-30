@@ -51,7 +51,7 @@ async def main(args):
     print(box.execution.hdmi_source)
 
     # Cleanup in case the registration was done this run
-    if registration_info:
+    if registration_info and not args.skipunregister:
         # Unregister by registration ID. HueSyncBox needs to have a valid accessToken to execute this request
         await box.unregister(registration_info['registration_id'])
 
@@ -68,6 +68,10 @@ if __name__ == '__main__':
                          help='ID of the syncbox' )
     parser.add_argument( '--token',
                          help='Token for the  hue syncbox')
+    parser.add_argument( '--skipunregister',
+                         action='store_true',
+                         help='Skip the unregistration so you can reuse the obtained token. Only unregisters when token was _not_ provided with --token')
+
 
     parser.add_argument( '--loglevel',
                          choices= ['DEBUG', 'INFO','WARNING','ERROR','CRITICAL'],

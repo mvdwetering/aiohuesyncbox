@@ -86,7 +86,7 @@ class Hue:
 
     async def set_group_active(self, id, active):
         data = { 'active': active }
-        await self._request('put', f'hue/groups/{id}', data=data)
+        await self._request('put', f'/hue/groups/{id}', data=data)
 
     async def update(self):
         response = await self._request('get', '/hue')

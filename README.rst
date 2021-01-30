@@ -40,7 +40,7 @@ Registration
     # The ID is the number that looks like C43212345678
     box = HueSyncBox(host, id)
 
-    print("Press the button on the box for 3 seconds until the light blinks green.")
+    print("Press the button on the box for a few seconds until the light blinks green.")
 
     registration_info = None
     while not registration_info:

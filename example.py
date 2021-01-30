@@ -20,7 +20,7 @@ async def main(args):
         print("No token provided, starting registration process with huesyncbox.")
         # This is basically the "Registration" example from the readme except for the unregister step which is at the end
         box = HueSyncBox(args.host, args.id)
-        print("Press the button on the box for 3 seconds until the light blinks green.")
+        print("Press the button on the box for a few seconds until the light blinks green.")
 
         registration_info = None
         while not registration_info:

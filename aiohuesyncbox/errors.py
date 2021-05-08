@@ -11,6 +11,7 @@ class RequestError(AiohuesyncboxException):
     Raised when host or API cannot be reached.
     """
 
+
 class Unauthorized(AiohuesyncboxException):
     """Application is not authorized."""
 
@@ -33,6 +34,6 @@ ERRORS = {
 }
 
 
-def raise_error(code, message):
+def raise_error(code: int, message: str) -> None:
     cls = ERRORS.get(code, AiohuesyncboxException)
     raise cls("{}: {}".format(code, message))

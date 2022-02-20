@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List, Optional
 from .helpers import generate_attribute_string
 
 
@@ -65,6 +65,9 @@ class Hue:
             groups.append(Group(key, value))
         return groups
 
+    async def _put(self, data: Dict) -> None:
+        await self._request("put", "/hue", data=data)
+
     @property
     def bridge_unique_id(self) -> str:
         """16 character ascii hex string bridge identifier."""
@@ -94,6 +97,23 @@ class Hue:
     async def set_group_active(self, id: str, active: bool) -> None:
         data = {"active": active}
         await self._request("put", f"/hue/groups/{id}", data=data)
+
+    async def set_bridge(
+        self,
+        bridge_unique_id: str,
+        username: str,
+        client_key: str,
+    ) -> None:
+        """Change bridge used by huesyncbox."""
+        await self._request(
+            "put",
+            f"/hue",
+            data={
+                "bridgeUniqueId": bridge_unique_id,
+                "username": username,
+                "clientKey": client_key,
+            },
+        )
 
     async def update(self) -> None:
         response = await self._request("get", "/hue")

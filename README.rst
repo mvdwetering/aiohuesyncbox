@@ -20,6 +20,20 @@ Instantiate the HueSyncBox class and access the API.
 
 For more details on the API see the official API documentation on https://developers.meethue.com
 
+*Note on changing bridge*
+
+Changing a bridge is a bit more involved than other calls.
+After calling `box.hue.set_bridge()` the syncbox will start switching which takes a while (seems to take about 15 seconds).
+You will have to wait until the attributes match the expected endstate, but the status displayed on the API can be a bit confusing during the process.
+
+These are the statussus I see when switching from bridge A to bridge B.
+
+* ID: Bridge A, IP: Bridge A, Status: connected
+* Call `box.hue.set_bridge()` with info for bridge B
+* ID: Bridge B, IP: Bridge A, Status: connecting
+* ID: Bridge B, IP: Bridge B, Status: disconnected
+* ID: Bridge B, IP: Bridge B, Status: invalidgroup
+
 
 Examples
 ========

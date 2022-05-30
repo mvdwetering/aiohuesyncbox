@@ -26,7 +26,7 @@ Changing a bridge is a bit more involved than other calls.
 After calling `box.hue.set_bridge()` the syncbox will start switching which takes a while (seems to take about 15 seconds).
 You will have to wait until the attributes match the expected endstate, but the status displayed on the API can be a bit confusing during the process.
 
-These are the statuss changes I see when switching from bridge A to bridge B.
+These are the status changes I see when switching from bridge A to bridge B.
 
 * ID: Bridge A, IP: Bridge A, Status: connected
 * Call `box.hue.set_bridge()` with info for bridge B

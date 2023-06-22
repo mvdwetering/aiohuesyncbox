@@ -38,6 +38,8 @@ class Execution:
         return generate_attribute_string(self, attributes)
 
     def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Execution):
+            return NotImplemented
         return self._raw == other._raw
 
     def _update_syncmodes(self) -> None:

@@ -51,6 +51,8 @@ class Hdmi:
         return generate_attribute_string(self, attributes)
 
     def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Hdmi):
+            return NotImplemented
         return self._raw == other._raw
 
     def _update_inputs_and_output(self) -> None:

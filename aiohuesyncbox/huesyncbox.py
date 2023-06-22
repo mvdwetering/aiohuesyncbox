@@ -71,10 +71,10 @@ class HueSyncBox:
         self._clientsession = self._get_clientsession()
 
         # API endpoints
-        self.device = None
-        self.execution = None
-        self.hue = None
-        self.hdmi = None
+        self.device: Device
+        self.execution: Execution
+        self.hue: Hue
+        self.hdmi: Hdmi
 
     async def __aenter__(self):
         return self
@@ -101,7 +101,7 @@ class HueSyncBox:
         return aiohttp.ClientSession(connector=connector)
 
     @property
-    def access_token(self) -> str:
+    def access_token(self) -> str | None:
         return self._access_token
 
     async def is_registered(self):
@@ -210,7 +210,10 @@ class HueSyncBox:
                 if resp.content_type == "application/json":
                     data = await resp.json()
                     if resp.status != 200:
-                        _raise_on_error(data)
+                        if isinstance(data, dict):
+                            _raise_on_error(data)
+                        else:
+                            logger.error("Received unexpected data format: %s" % str(data))
                 return data
         except aiohttp.client_exceptions.ClientError as err:
             raise RequestError(

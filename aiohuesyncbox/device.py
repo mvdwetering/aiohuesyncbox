@@ -20,6 +20,8 @@ class Device:
         return generate_attribute_string(self, attributes)
 
     def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Device):
+            return NotImplemented
         return self._raw == other._raw
 
     @property

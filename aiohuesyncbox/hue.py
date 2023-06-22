@@ -30,7 +30,7 @@ class Group:
         return self._raw["active"]
 
     @property
-    def owner(self) -> str:
+    def owner(self) -> str | None:
         """
         User friendly name of the application that is streaming on the associated bridge.
         Only exposed if active is true
@@ -56,6 +56,8 @@ class Hue:
         return generate_attribute_string(self, attributes)
 
     def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Hue):
+            return NotImplemented
         return self._raw == other._raw
 
     @staticmethod

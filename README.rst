@@ -81,7 +81,7 @@ Basic usage
     from aiohuesyncbox import HueSyncBox
 
     # host and id can be obtained through mDNS/zeroconf discovery
-    # (or for testing look them up in the official Hue Sync app)
+    # (or for testing look them up in the official Hue app)
     box = HueSyncBox(host, id, access_token_from_registration_info)
 
     # Call initialize before interacting with the box

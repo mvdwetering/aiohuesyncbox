@@ -3,6 +3,9 @@
 from zeroconf import ServiceBrowser, Zeroconf
 
 class MyListener:
+    def update_service(self, zc: Zeroconf, type_: str, name: str) -> None:
+        pass
+    
     def remove_service(self, zeroconf, type, name):
         print("Service %s removed" % (name,))
 

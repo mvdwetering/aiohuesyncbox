@@ -18,7 +18,7 @@ MIN_API_LEVEL = 4
 logger = logging.getLogger(__name__)
 
 
-class CommonNameInserterResolver(aiohttp.DefaultResolver):
+class CommonNameInserterResolver(aiohttp.DefaultResolver): # type: ignore
     def __init__(self, common_name, loop=None, *args, **kwargs):
         super().__init__(loop=loop, *args, **kwargs)
         self._common_name = common_name
@@ -215,9 +215,9 @@ class HueSyncBox:
                         else:
                             logger.error("Received unexpected data format: %s" % str(data))
                 return data
-        except aiohttp.client_exceptions.ClientError as err:
+        except aiohttp.ClientError as err:
             raise RequestError(
-                "Error requesting data from {}: {}".format(self._host, err)
+                f"Error requesting data from {self._host}: {err}"
             ) from None
 
 

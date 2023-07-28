@@ -3,7 +3,6 @@
 import argparse
 import logging
 import asyncio
-import time
 
 from aiohuesyncbox import HueSyncBox, InvalidState
 
@@ -22,11 +21,10 @@ async def main(args):
         box = HueSyncBox(args.host, args.id)
         print("Press the button on the box for a few seconds until the light blinks green.")
 
-        registration_info = None
         while not registration_info:
+            await asyncio.sleep(1)
             try:
                 registration_info = await box.register("Your application", "Your device")
-                time.sleep(1)
             except InvalidState:
                 # Indicates the button was not pressed
                 pass

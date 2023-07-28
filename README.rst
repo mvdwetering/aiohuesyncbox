@@ -46,7 +46,6 @@ Registration
 
 .. code-block:: python
 
-    import time
     from aiohuesyncbox import HueSyncBox, InvalidState
 
     # host and id can be obtained through mDNS/zeroconf discovery
@@ -63,7 +62,7 @@ Registration
         except InvalidState:
             # Indicates the button was not pressed
             pass
-        time.sleep(1)
+        await asyncio.sleep(1)
 
     # Save registration_info somewhere and use the 'access_token' when instantiating HueSyncBox next time
     print(registration_info)

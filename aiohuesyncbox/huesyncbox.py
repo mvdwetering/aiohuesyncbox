@@ -78,6 +78,9 @@ class HueSyncBox:
         self.hdmi: Hdmi
         self.hue: Hue
 
+        self._last_response = None # For debugging purposes
+
+
     async def __aenter__(self):
         return self
 
@@ -105,6 +108,10 @@ class HueSyncBox:
     @property
     def access_token(self) -> str | None:
         return self._access_token
+
+    @property
+    def last_response(self) -> Dict | None:
+        return self._last_response
 
     async def is_registered(self):
         try:
@@ -165,7 +172,10 @@ class HueSyncBox:
 
     async def update(self):
         response = await self.request("get", "")
+        self._last_response = response
+
         if response:
+            self.behavior = Behavior(response["behavior"], self.request)
             self.device = Device(response["device"], self.request)
             self.execution = Execution(response["execution"], self.request)
             self.hue = Hue(response["hue"], self.request)

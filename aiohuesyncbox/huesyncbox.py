@@ -6,6 +6,7 @@ from typing import Dict, Optional
 
 import aiohttp
 
+from .behavior import Behavior
 from .device import Device
 from .execution import Execution
 from .hue import Hue
@@ -71,10 +72,11 @@ class HueSyncBox:
         self._clientsession = self._get_clientsession()
 
         # API endpoints
+        self.behavior: Behavior
         self.device: Device
         self.execution: Execution
-        self.hue: Hue
         self.hdmi: Hdmi
+        self.hue: Hue
 
     async def __aenter__(self):
         return self

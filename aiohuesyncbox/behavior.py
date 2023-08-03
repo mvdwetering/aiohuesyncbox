@@ -25,7 +25,7 @@ class Behavior:
 
     @property
     def force_dovi_native(self) -> int | None:
-        """Force DolbyVision compatibility of huesyncbox."""
+        """When the TV advertises Dolby Vision force to use native native mode. Disabled 0, Enabled 1."""
         return self._raw.get("forceDoviNative")
 
     async def set_force_dovi_native(self, enabled:int) -> None:

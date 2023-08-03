@@ -1,12 +1,33 @@
 from .helpers import generate_attribute_string
 
 
+class Wifi:
+    """Represent wifi status"""
+
+    def __init__(self, raw) -> None:
+        self._raw = raw
+
+    @property
+    def ssid(self) -> str:
+        """Wifi SSID"""
+        return self._raw["ssid"]
+
+    @property
+    def strength(self) -> int:
+        """
+        0 = not connected; 1 = weak; 2 = fair; 3 = good; 4 = excellent
+        """
+        return self._raw["strength"]
+
+
 class Device:
     """Represent Device config."""
 
     def __init__(self, raw, request) -> None:
         self._raw = raw
         self._request = request
+        self._wifi = Wifi(self._raw['wifi'])
+
 
     def __str__(self) -> str:
         attributes = [
@@ -16,6 +37,7 @@ class Device:
             "ip_address",
             "api_level",
             "firmware_version",
+            "wifi"
         ]
         return generate_attribute_string(self, attributes)
 
@@ -54,7 +76,25 @@ class Device:
         """User readable version of the device firmware, starting with decimal major .minor .maintenance format e.g. 1.12.3."""
         return self._raw["firmwareVersion"]
 
+    @property
+    def wifi(self) -> Wifi:
+        """Root object for Wifi information"""
+        return self._wifi
+    
+    @property
+    def led_mode(self) -> int:
+        """
+        0 = off in powersave, passthrough or sync mode; 1 = regular; 2 = dimmed in powersave or passthrough mode and off in sync mode
+        """
+        return self._raw["ledMode"]
+
+
+    async def set_led_mode(self, mode: int) -> None:
+        await self._request("put", f"/device", data={"ledMode": mode})
+
+
     async def update(self) -> None:
         response = await self._request("get", "/device")
         if response:
             self._raw = response
+            self._wifi = Wifi(self._raw['wifi'])

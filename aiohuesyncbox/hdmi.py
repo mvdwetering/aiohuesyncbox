@@ -1,10 +1,10 @@
 from typing import Dict, List
 from .helpers import generate_attribute_string
 
+INPUTS = ["input1", "input2", "input3", "input4"]
 
 class Input:
-    def __init__(self, id: str, raw: Dict) -> None:
-        self.id = id
+    def __init__(self, raw: Dict) -> None:
         self._raw = raw
 
     @property
@@ -56,12 +56,11 @@ class Hdmi:
         return self._raw == other._raw
 
     def _update_inputs_and_output(self) -> None:
-        inputs = []
-        for key, value in self._raw.items():
-            if key.startswith("input"):
-                inputs.append(Input(key, value))
-        self._inputs = inputs
-        self._output = Output("output", self._raw["output"])
+        for input_id in INPUTS:
+            if input_id in self._raw:
+                input = Input(self._raw[input_id])
+                setattr(self, f"_{input_id}", input)
+        self._output = Output(self._raw["output"])
 
     @property
     def content_specs(self) -> str:
@@ -79,9 +78,24 @@ class Hdmi:
         return self._raw["audioSyncSupported"]
 
     @property
-    def inputs(self) -> List[Input]:
-        """HDMI inputs of the huesyncbox."""
-        return self._inputs
+    def input1(self) -> Input:
+        """HDMI input 1 of the huesyncbox."""
+        return getattr(self, "_input1")
+
+    @property
+    def input2(self) -> Input:
+        """HDMI input 2 of the huesyncbox."""
+        return getattr(self, "_input2")
+
+    @property
+    def input3(self) -> Input:
+        """HDMI input 3 of the huesyncbox."""
+        return getattr(self, "_input3")
+
+    @property
+    def input4(self) -> Input:
+        """HDMI input 4 of the huesyncbox."""
+        return getattr(self, "_input4")
 
     @property
     def output(self) -> Output:

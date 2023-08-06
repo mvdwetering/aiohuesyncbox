@@ -2,7 +2,7 @@ AIOHUESYNCBOX
 =============
 
 Asyncio package to communicate with Philips Hue Play HDMI Sync Box.
-This package is aimed at basic control of the box. Initial setup and configuration is assumed to done with the official Hue Sync app.
+This package is aimed at basic control of the box. Initial setup and configuration is assumed to done with the official Hue app.
 
 
 Installation
@@ -49,7 +49,7 @@ Registration
     from aiohuesyncbox import HueSyncBox, InvalidState
 
     # host and id can be obtained through mDNS/zeroconf discovery
-    # (or for testing look them up in the official Hue Sync app)
+    # (or for testing look them up in the official Hue app)
     # The ID is the number that looks like C43212345678
     box = HueSyncBox(host, id)
 

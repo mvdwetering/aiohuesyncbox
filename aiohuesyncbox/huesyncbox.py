@@ -1,3 +1,4 @@
+import asyncio
 import ipaddress
 import logging
 import ssl
@@ -102,7 +103,7 @@ class HueSyncBox:
             ),  # Use custom resolver to get certificate validation on common_name working
         )
 
-        return aiohttp.ClientSession(connector=connector)
+        return aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=10))
 
     @property
     def access_token(self) -> str | None:
@@ -230,8 +231,12 @@ class HueSyncBox:
                 return data
         except aiohttp.ClientError as err:
             raise RequestError(
-                f"Error requesting data from {self._host}: {err}"
-            ) from None
+                f"Error requesting data from {self._host}"
+            ) from err
+        except asyncio.TimeoutError as err:
+            raise RequestError(
+                f"Timeout requesting data from {self._host}"
+            ) from err
 
 
 def _raise_on_error(data: Dict):

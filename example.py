@@ -6,6 +6,7 @@ import asyncio
 
 from aiohuesyncbox import HueSyncBox, InvalidState
 
+
 async def main(args):
     registration_info = None
 
@@ -19,12 +20,16 @@ async def main(args):
         print("No token provided, starting registration process with huesyncbox.")
         # This is basically the "Registration" example from the readme except for the unregister step which is at the end
         box = HueSyncBox(args.host, args.id)
-        print("Press the button on the box for a few seconds until the light blinks green.")
+        print(
+            "Press the button on the box for a few seconds until the light blinks green."
+        )
 
         while not registration_info:
             await asyncio.sleep(1)
             try:
-                registration_info = await box.register("Your application", "Your device")
+                registration_info = await box.register(
+                    "Your application", "Your device"
+                )
             except InvalidState:
                 # Indicates the button was not pressed
                 pass
@@ -51,30 +56,33 @@ async def main(args):
     # Cleanup in case the registration was done this run
     if registration_info and not args.skipunregister:
         # Unregister by registration ID. HueSyncBox needs to have a valid accessToken to execute this request
-        await box.unregister(registration_info['registration_id'])
+        await box.unregister(registration_info["registration_id"])
 
     await box.close()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     ## Commandlineoptions
-    parser = argparse.ArgumentParser(description='Example application for aiohuesyncbox.')
+    parser = argparse.ArgumentParser(
+        description="Example application for aiohuesyncbox."
+    )
 
-    parser.add_argument( 'host',
-                         help='Hostname or IP Address of the syncbox' )
-    parser.add_argument( 'id',
-                         help='ID of the syncbox' )
-    parser.add_argument( '--token',
-                         help='Token for the  hue syncbox')
-    parser.add_argument( '--skipunregister',
-                         action='store_true',
-                         help='Skip the unregistration so you can reuse the obtained token. Only unregisters when token was _not_ provided with --token')
+    parser.add_argument("host", help="Hostname or IP Address of the syncbox")
+    parser.add_argument("id", help="ID of the syncbox")
+    parser.add_argument("--token", help="Token for the  hue syncbox")
+    parser.add_argument(
+        "--skipunregister",
+        action="store_true",
+        help="Skip the unregistration so you can reuse the obtained token. Only unregisters when token was _not_ provided with --token",
+    )
 
-
-    parser.add_argument( '--loglevel',
-                         choices= ['DEBUG', 'INFO','WARNING','ERROR','CRITICAL'],
-                         default='INFO',
-                         help='Define loglevel, default is INFO.' )
+    parser.add_argument(
+        "--loglevel",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        default="INFO",
+        help="Define loglevel, default is INFO.",
+    )
 
     args = parser.parse_args()
 

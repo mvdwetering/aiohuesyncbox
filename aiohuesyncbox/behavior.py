@@ -1,6 +1,7 @@
 from typing import Dict
 from .helpers import generate_attribute_string
 
+
 class Behavior:
     """Represent Behavior config of huesyncbox."""
 
@@ -22,13 +23,12 @@ class Behavior:
             return NotImplemented
         return self._raw == other._raw
 
-
     @property
     def force_dovi_native(self) -> int | None:
         """When the TV advertises Dolby Vision force to use native native mode. Disabled 0, Enabled 1."""
         return self._raw.get("forceDoviNative")
 
-    async def set_force_dovi_native(self, enabled:int) -> None:
+    async def set_force_dovi_native(self, enabled: int) -> None:
         """Force DolbyVision compatibility of huesyncbox on or off."""
         data = {"forceDoviNative": enabled}
         await self._put(data)

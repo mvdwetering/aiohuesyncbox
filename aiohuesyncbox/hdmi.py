@@ -3,6 +3,7 @@ from .helpers import generate_attribute_string
 
 INPUTS = ["input1", "input2", "input3", "input4"]
 
+
 class Input:
     def __init__(self, raw: Dict) -> None:
         self._raw = raw

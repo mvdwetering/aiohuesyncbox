@@ -26,8 +26,7 @@ class Device:
     def __init__(self, raw, request) -> None:
         self._raw = raw
         self._request = request
-        self._wifi = Wifi(self._raw['wifi'])
-
+        self._wifi = Wifi(self._raw["wifi"])
 
     def __str__(self) -> str:
         attributes = [
@@ -37,7 +36,7 @@ class Device:
             "ip_address",
             "api_level",
             "firmware_version",
-            "wifi"
+            "wifi",
         ]
         return generate_attribute_string(self, attributes)
 
@@ -77,10 +76,10 @@ class Device:
         return self._raw["firmwareVersion"]
 
     @property
-    def wifi(self) -> Wifi:
-        """Root object for Wifi information"""
+    def wifi(self) -> Wifi | None:
+        """Root object for Wifi information if available."""
         return self._wifi
-    
+
     @property
     def led_mode(self) -> int:
         """
@@ -88,13 +87,11 @@ class Device:
         """
         return self._raw["ledMode"]
 
-
     async def set_led_mode(self, mode: int) -> None:
         await self._request("put", f"/device", data={"ledMode": mode})
-
 
     async def update(self) -> None:
         response = await self._request("get", "/device")
         if response:
             self._raw = response
-            self._wifi = Wifi(self._raw['wifi'])
+            self._wifi = Wifi(self._raw["wifi"]) if "wifi" in self._raw else None

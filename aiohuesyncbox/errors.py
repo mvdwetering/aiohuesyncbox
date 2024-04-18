@@ -1,5 +1,9 @@
 """Aiohuesyncbox errors."""
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class AiohuesyncboxException(Exception):
     """Base error for aiohuesyncbox."""
@@ -36,4 +40,5 @@ ERRORS = {
 
 def raise_error(code: int, message: str) -> None:
     cls = ERRORS.get(code, AiohuesyncboxException)
+    logger.debug("raise_error, %s, %s, %s" % (code, message, cls))
     raise cls("{}: {}".format(code, message))

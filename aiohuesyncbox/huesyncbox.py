@@ -232,10 +232,12 @@ class HueSyncBox:
                             )
                 return data
         except aiohttp.ClientError as err:
+            logger.debug(err, exc_info=True)
             raise RequestError(
                 f"Error requesting data from {self._host}"
             ) from err
         except asyncio.TimeoutError as err:
+            logger.debug(err, exc_info=True)
             raise RequestError(
                 f"Timeout requesting data from {self._host}"
             ) from err

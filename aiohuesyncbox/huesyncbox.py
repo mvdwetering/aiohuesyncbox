@@ -50,6 +50,8 @@ class CommonNameInserterResolver(aiohttp.DefaultResolver):  # type: ignore
         for host in hosts:
             host["hostname"] = self._common_name
 
+        logger.debug("Resolved hosts: %s", hosts)
+
         return hosts
 
 

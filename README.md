@@ -1,26 +1,22 @@
-AIOHUESYNCBOX
-=============
+# AIOHUESYNCBOX
 
 Asyncio package to communicate with Philips Hue Play HDMI Sync Box.
 This package is aimed at basic control of the box. Initial setup and configuration is assumed to done with the official Hue app.
 
 
-Installation
-============
+## Installation
 
-.. code-block:: bash
-
+```bash
     python3 -m pip install aiohuesyncbox
+```
 
-
-Usage
-=====
+## Usage
 
 Instantiate the HueSyncBox class and access the API.
 
 For more details on the API see the official API documentation on https://developers.meethue.com
 
-*Note on changing bridge*
+### Note on changing bridge
 
 Changing a bridge is a bit more involved than other calls.
 After calling `box.hue.set_bridge()` the syncbox will start switching which takes a while (seems to take about 15 seconds).
@@ -35,17 +31,14 @@ These are the status changes I see when switching from bridge A to bridge B.
 * ID: Bridge B, IP: Bridge B, Status: connected or ID: Bridge B, IP: Bridge B, Status: invalidgroup
 
 
-Examples
-========
+## Examples
 
 The examples below are available as a runnable script in the repository.
 There is also an example on using `zeroconf` for device discovery.
 
-Registration
-------------
+### Registration
 
-.. code-block:: python
-
+```python
     from aiohuesyncbox import HueSyncBox, InvalidState
 
     # host and id can be obtained through mDNS/zeroconf discovery
@@ -70,12 +63,11 @@ Registration
     # Unregister by registration ID.
     # HueSyncBox needs to use the associated `access_token` to execute this request.
     await box.unregister(registration_info['registration_id'])
+```
 
+### Basic usage
 
-Basic usage
------------
-
-.. code-block:: python
+```python
 
     from aiohuesyncbox import HueSyncBox
 
@@ -96,4 +88,4 @@ Basic usage
     await box.execution.update()
     print(box.execution.sync_active)
     print(box.execution.mode)
-
+```

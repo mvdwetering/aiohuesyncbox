@@ -15,7 +15,7 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, "README.rst"), encoding="utf-8") as f:
+with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
@@ -26,6 +26,7 @@ setup(
     version="0.0.27",
     description="Asyncio package to communicate with a Philips Hue Play HDMI Sync Box.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     # The project's main homepage.
     url="https://github.com/mvdwetering/aiohuesyncbox",
     # Author details

@@ -19,42 +19,6 @@ MIN_API_LEVEL = 4
 
 logger = logging.getLogger(__name__)
 
-
-class CommonNameInserterResolver(aiohttp.DefaultResolver):  # type: ignore
-    def __init__(self, common_name, loop=None, *args, **kwargs):
-        super().__init__(loop=loop, *args, **kwargs)
-        self._common_name = common_name
-
-    async def resolve(self, host, port=0, family=socket.AF_INET):
-        hosts = []
-        if host.startswith("_"):
-            # Host was an IP address that was mangled to force a DNS lookup (_ are not valid)
-            # and with that forced lookup end up in this call.
-            # This is needed as IP addresses don't need lookup,
-            # but I need to set the hostname to the common_name for certificate validation
-            # and this seems to be the only place I could hook into
-
-            # Generate a suitable entry in the hosts list
-            hosts.append(
-                {
-                    "host": host[1:],
-                    "port": port,
-                    "family": family,
-                    "proto": 6,  # TCP I think
-                    "flags": socket.AI_NUMERICHOST,
-                }
-            )
-        else:
-            hosts.append(await super().resolve(host, port=port, family=family))
-
-        for host in hosts:
-            host["hostname"] = self._common_name
-
-        logger.debug("Resolved hosts: %s", hosts)
-
-        return hosts
-
-
 class HueSyncBox:
     """Control a Philips Hue Play HDMI Sync Box."""
 
@@ -100,9 +64,6 @@ class HueSyncBox:
             enable_cleanup_closed=True,  # Home Assistant sets it so lets do it also
             ssl=context,
             limit_per_host=1,  # Syncbox can handle a limited amount of connections, only take what we need
-            resolver=CommonNameInserterResolver(
-                self._id
-            ),  # Use custom resolver to get certificate validation on common_name working
         )
 
         return aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=10))
@@ -183,19 +144,6 @@ class HueSyncBox:
             self.hue = Hue(response["hue"], self.request)
             self.hdmi = Hdmi(response["hdmi"], self.request)
 
-    def _mangled_host(self) -> str:
-        """
-        Returns the hostname or a modified hostname in case the host is an IP address
-        to make sure DNS lookups are required as that allows to use the common_name
-        instead of servername for certificate validation.
-        """
-        try:
-            ipaddress.ip_address(self._host)
-            return f"_{self._host}"
-        except ValueError:
-            pass
-        return self._host
-
     async def request(
         self, method: str, path: str, data: Optional[Dict] = None, auth: bool = True
     ):
@@ -206,7 +154,7 @@ class HueSyncBox:
             # This solves an issue when Updates were scheduled and HA was shutdown
             return None
 
-        url = f"https://{self._mangled_host()}:{self._port}{self._path}/v1{path}"
+        url = f"https://{self._host}:{self._port}{self._path}/v1{path}"
 
         try:
             logger.debug("%s, %s, %s" % (method, url, data))
@@ -216,7 +164,7 @@ class HueSyncBox:
                 headers["Authorization"] = f"Bearer {self._access_token}"
 
             async with self._clientsession.request(
-                method, url, json=data, headers=headers
+                method, url, json=data, headers=headers, server_hostname=self._id
             ) as resp:
                 logger.debug("%s, %s" % (resp.status, await resp.text("utf-8")))
 

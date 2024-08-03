@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 from .helpers import generate_attribute_string
 
 
@@ -109,7 +109,7 @@ class Hue:
         """Change bridge used by huesyncbox."""
         await self._request(
             "put",
-            f"/hue",
+            "/hue",
             data={
                 "bridgeUniqueId": bridge_unique_id,
                 "username": username,

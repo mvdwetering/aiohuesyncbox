@@ -26,7 +26,7 @@ class Device:
     def __init__(self, raw, request) -> None:
         self._raw = raw
         self._request = request
-        self._wifi = Wifi(self._raw["wifi"])
+        self._wifi:Wifi|None = Wifi(self._raw["wifi"])
 
     def __str__(self) -> str:
         attributes = [
@@ -88,7 +88,7 @@ class Device:
         return self._raw["ledMode"]
 
     async def set_led_mode(self, mode: int) -> None:
-        await self._request("put", f"/device", data={"ledMode": mode})
+        await self._request("put", "/device", data={"ledMode": mode})
 
     async def update(self) -> None:
         response = await self._request("get", "/device")

@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 from .helpers import generate_attribute_string
 
 INPUTS = ["input1", "input2", "input3", "input4"]

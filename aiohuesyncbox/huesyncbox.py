@@ -1,8 +1,6 @@
 import asyncio
-import ipaddress
 import logging
 import ssl
-import socket
 from typing import Dict, Optional
 
 import aiohttp

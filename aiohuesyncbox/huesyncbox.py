@@ -56,26 +56,25 @@ class HueSyncBox:
         Get a clientsession that is tuned for communication with the Hue Syncbox
         """
 
-        def _get_aiohttp_client_session(loop) -> aiohttp.ClientSession:
+        def _build_ssl_context() -> ssl.SSLContext:
             context = ssl.create_default_context(cadata=HSB_CACERT)
             context.hostname_checks_common_name = True
+            return context
 
-            connector = aiohttp.TCPConnector(
-                enable_cleanup_closed=True,  # Home Assistant sets it so lets do it also
-                ssl=context,
-                limit_per_host=1,  # Syncbox can handle a limited amount of connections, only take what we need
-                loop=loop  # Need to provide loop manually because running in executor
-            )
 
-            return aiohttp.ClientSession(
-                connector=connector, timeout=aiohttp.ClientTimeout(total=10)
-            )
-
-        # Creating a session has some blocking IO code so we need to run it in the executor
+        # Creating an SSL context has some blocking IO so need to run it in the executor
         loop = asyncio.get_running_loop()
-        session = await loop.run_in_executor(None, _get_aiohttp_client_session, loop)
+        context = await loop.run_in_executor(None, _build_ssl_context)
 
-        return session
+        connector = aiohttp.TCPConnector(
+            enable_cleanup_closed=True,  # Home Assistant sets it so lets do it also
+            ssl=context,
+            limit_per_host=1,  # Syncbox can handle a limited amount of connections, only take what we need
+        )
+
+        return aiohttp.ClientSession(
+            connector=connector, timeout=aiohttp.ClientTimeout(total=10)
+        )
 
     @property
     def access_token(self) -> str | None:

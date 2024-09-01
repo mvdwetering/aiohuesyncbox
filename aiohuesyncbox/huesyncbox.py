@@ -34,7 +34,7 @@ class HueSyncBox:
         self._port = port
         self._path = path
 
-        self._clientsession = self._get_clientsession()
+        self._clientsession: aiohttp.ClientSession | None = None
 
         # API endpoints
         self.behavior: Behavior
@@ -51,12 +51,20 @@ class HueSyncBox:
     async def __aexit__(self, exc_type, exc, tb):
         await self.close()
 
-    def _get_clientsession(self) -> aiohttp.ClientSession:
+    async def _get_clientsession(self) -> aiohttp.ClientSession:
         """
         Get a clientsession that is tuned for communication with the Hue Syncbox
         """
-        context = ssl.create_default_context(cadata=HSB_CACERT)
-        context.hostname_checks_common_name = True
+
+        def _build_ssl_context() -> ssl.SSLContext:
+            context = ssl.create_default_context(cadata=HSB_CACERT)
+            context.hostname_checks_common_name = True
+            return context
+
+
+        # Creating an SSL context has some blocking IO so need to run it in the executor
+        loop = asyncio.get_running_loop()
+        context = await loop.run_in_executor(None, _build_ssl_context)
 
         connector = aiohttp.TCPConnector(
             enable_cleanup_closed=True,  # Home Assistant sets it so lets do it also
@@ -64,7 +72,9 @@ class HueSyncBox:
             limit_per_host=1,  # Syncbox can handle a limited amount of connections, only take what we need
         )
 
-        return aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=10))
+        return aiohttp.ClientSession(
+            connector=connector, timeout=aiohttp.ClientTimeout(total=10)
+        )
 
     @property
     def access_token(self) -> str | None:
@@ -129,7 +139,8 @@ class HueSyncBox:
             )
 
     async def close(self):
-        await self._clientsession.close()
+        if self._clientsession is not None:
+            await self._clientsession.close()
 
     async def update(self):
         response = await self.request("get", "")
@@ -146,6 +157,10 @@ class HueSyncBox:
         self, method: str, path: str, data: Optional[Dict] = None, auth: bool = True
     ):
         """Make a request to the API."""
+
+        if self._clientsession is None:
+            self._clientsession = await self._get_clientsession()
+            assert(self._clientsession is not None)
 
         if self._clientsession.closed:
             # Avoid runtime errors when connection is closed.
@@ -179,14 +194,10 @@ class HueSyncBox:
                 return data
         except aiohttp.ClientError as err:
             logger.debug(err, exc_info=True)
-            raise RequestError(
-                f"Error requesting data from {self._host}"
-            ) from err
+            raise RequestError(f"Error requesting data from {self._host}") from err
         except asyncio.TimeoutError as err:
             logger.debug(err, exc_info=True)
-            raise RequestError(
-                f"Timeout requesting data from {self._host}"
-            ) from err
+            raise RequestError(f"Timeout requesting data from {self._host}") from err
 
 
 def _raise_on_error(data: Dict):

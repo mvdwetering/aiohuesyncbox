@@ -4,3 +4,11 @@ from .errors import Unauthorized as Unauthorized
 from .errors import InvalidState as InvalidState
 
 from .huesyncbox import HueSyncBox as HueSyncBox
+
+__all__ = [
+    "AiohuesyncboxException",
+    "RequestError",
+    "Unauthorized",
+    "InvalidState",
+    "HueSyncBox",
+]

@@ -28,7 +28,7 @@ classifiers = [
     "Topic :: Home Automation",
     "Topic :: Software Development :: Libraries",
 ]
-dependencies = ["aiohttp>=3.9.0,<4"]
+dependencies = ["aiohttp>=3.9.0"]
 
 urls = { Homepage = "https://github.com/mvdwetering/aiohuesyncbox" } 
 

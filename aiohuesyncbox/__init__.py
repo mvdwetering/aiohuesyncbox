@@ -15,7 +15,6 @@ from .hdmi import Hdmi as Hdmi
 from .hdmi import Input as Input
 from .hdmi import Output as Output
 
-
 __all__ = [
     "AiohuesyncboxException",
     "RequestError",

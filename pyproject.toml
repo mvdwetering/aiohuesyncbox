@@ -11,7 +11,7 @@ include = ["aiohuesyncbox*"]
 
 [project]
 name = "aiohuesyncbox"
-version = "0.0.30"
+version = "0.0.31"
 description = "Asyncio package to communicate with a Philips Hue Play HDMI Sync Box."
 readme = "README.md"
 requires-python = ">=3.8"

@@ -17,6 +17,7 @@ MIN_API_LEVEL = 4
 
 logger = logging.getLogger(__name__)
 
+
 class HueSyncBox:
     """Control a Philips Hue Play HDMI Sync Box."""
 
@@ -60,7 +61,6 @@ class HueSyncBox:
             context = ssl.create_default_context(cadata=HSB_CACERT)
             context.hostname_checks_common_name = True
             return context
-
 
         # Creating an SSL context has some blocking IO so need to run it in the executor
         loop = asyncio.get_running_loop()
@@ -160,7 +160,7 @@ class HueSyncBox:
 
         if self._clientsession is None:
             self._clientsession = await self._get_clientsession()
-            assert(self._clientsession is not None)
+            assert self._clientsession is not None
 
         if self._clientsession.closed:
             # Avoid runtime errors when connection is closed.

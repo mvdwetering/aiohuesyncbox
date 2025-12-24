@@ -26,7 +26,7 @@ class Device:
     def __init__(self, raw, request) -> None:
         self._raw = raw
         self._request = request
-        self._wifi:Wifi|None = Wifi(self._raw["wifi"])
+        self._wifi: Wifi | None = Wifi(self._raw["wifi"])
 
     def __str__(self) -> str:
         attributes = [

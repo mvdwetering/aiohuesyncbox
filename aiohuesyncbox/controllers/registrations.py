@@ -1,5 +1,3 @@
-from typing import Dict, Optional
-
 from ..models import Registration, RegistrationCreate, RequestFunc
 from .base import CollectionResource
 
@@ -12,7 +10,7 @@ class Registrations(CollectionResource[Registration]):
 
     async def create(
         self, application_name: str, instance_name: str
-    ) -> Optional[Dict[str, str]]:
+    ) -> dict[str, str] | None:
         """Register a new application/instance.
 
         Make sure to _not_ use a possibly invalid token for this request, as

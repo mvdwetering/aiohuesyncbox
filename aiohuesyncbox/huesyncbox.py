@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import ssl
-from typing import Dict, Optional
+from typing import Self
 
 import aiohttp
 
@@ -22,7 +22,7 @@ class HueSyncBox:
         self,
         host: str,
         id: str,
-        access_token: Optional[str] = None,
+        access_token: str | None = None,
         port: int = 443,
         path: str = "/api",
     ) -> None:
@@ -46,7 +46,7 @@ class HueSyncBox:
 
         self._last_response = None  # For debugging purposes
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
@@ -81,7 +81,7 @@ class HueSyncBox:
         return self._access_token
 
     @property
-    def last_response(self) -> Dict | None:
+    def last_response(self) -> dict | None:
         return self._last_response
 
     async def is_registered(self):
@@ -147,7 +147,7 @@ class HueSyncBox:
             self.presets.load(response["presets"])
 
     async def request(
-        self, method: str, path: str, data: Optional[Dict] = None, auth: bool = True
+        self, method: str, path: str, data: dict | None = None, auth: bool = True
     ):
         """Make a request to the API."""
 
@@ -193,6 +193,6 @@ class HueSyncBox:
             raise RequestError(f"Timeout requesting data from {self._host}") from err
 
 
-def _raise_on_error(data: Dict):
+def _raise_on_error(data: dict):
     """Check response for error message."""
     raise_error(data["code"], data["message"])

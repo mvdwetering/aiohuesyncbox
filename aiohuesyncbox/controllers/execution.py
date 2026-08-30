@@ -1,5 +1,3 @@
-from typing import Optional
-
 from ..models import ExecutionData, ExecutionUpdate, GameMode, MusicMode, RequestFunc, VideoMode
 from ..models.enums import CycleDirection, ExecutionMode, HdmiSource, Intensity
 from .base import Resource
@@ -44,22 +42,22 @@ class Execution(Resource[ExecutionData]):
 
     async def set_state(
         self,
-        sync_active: Optional[bool] = None,
-        sync_toggle: Optional[bool] = None,
-        hdmi_active: Optional[bool] = None,
-        hdmi_active_toggle: Optional[bool] = None,
-        mode: Optional[ExecutionMode] = None,
-        mode_cycle: Optional[CycleDirection] = None,
-        hdmi_source: Optional[HdmiSource] = None,
-        hdmi_source_cycle: Optional[CycleDirection] = None,
-        brightness: Optional[int] = None,
-        brightness_step: Optional[int] = None,
-        video: Optional[VideoMode] = None,
-        game: Optional[GameMode] = None,
-        music: Optional[MusicMode] = None,
-        intensity: Optional[Intensity] = None,
-        intensity_cycle: Optional[CycleDirection] = None,
-        hue_target: Optional[str] = None,
+        sync_active: bool | None = None,
+        sync_toggle: bool | None = None,
+        hdmi_active: bool | None = None,
+        hdmi_active_toggle: bool | None = None,
+        mode: ExecutionMode | None = None,
+        mode_cycle: CycleDirection | None = None,
+        hdmi_source: HdmiSource | None = None,
+        hdmi_source_cycle: CycleDirection | None = None,
+        brightness: int | None = None,
+        brightness_step: int | None = None,
+        video: VideoMode | None = None,
+        game: GameMode | None = None,
+        music: MusicMode | None = None,
+        intensity: Intensity | None = None,
+        intensity_cycle: CycleDirection | None = None,
+        hue_target: str | None = None,
     ) -> None:
         """Change execution state of huesyncbox."""
         update = ExecutionUpdate(

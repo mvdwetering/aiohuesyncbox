@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ..models import Preset, PresetCreate, PresetUpdate, RequestFunc
 from .base import CollectionResource
@@ -10,7 +10,7 @@ class Presets(CollectionResource[Preset]):
     def __init__(self, request: RequestFunc) -> None:
         super().__init__("/presets", Preset, request)
 
-    async def create(self, name: str, execution: Dict[str, Any]) -> Optional[str]:
+    async def create(self, name: str, execution: dict[str, Any]) -> str | None:
         """Create a new preset, returns the generated preset id."""
         response = await self._request(
             "post", self._path, PresetCreate(name=name, execution=execution).to_dict()
@@ -20,8 +20,8 @@ class Presets(CollectionResource[Preset]):
     async def set(
         self,
         id: str,
-        name: Optional[str] = None,
-        execution: Optional[Dict[str, Any]] = None,
+        name: str | None = None,
+        execution: dict[str, Any] | None = None,
     ) -> None:
         update = PresetUpdate(name=name, execution=execution)
         await self._request("put", f"{self._path}/{id}", data=update.to_dict())

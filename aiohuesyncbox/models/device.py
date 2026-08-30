@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 from .base import BaseModel, UpdateModel
 from .enums import DeviceAction, LedMode, WifiState, WifiStrength
@@ -34,11 +33,11 @@ class DeviceCapabilities(BaseModel):
 class DeviceUpdate(UpdateModel):
     """Mutable fields accepted by the `/device` endpoint."""
 
-    name: Optional[str] = None
-    led_mode: Optional[LedMode] = None
-    action: Optional[DeviceAction] = None
-    update: Optional[DeviceAutoUpdate] = None
-    bluetooth: Optional[bool] = None
+    name: str | None = None
+    led_mode: LedMode | None = None
+    action: DeviceAction | None = None
+    update: DeviceAutoUpdate | None = None
+    bluetooth: bool | None = None
 
 
 @dataclass
@@ -61,21 +60,21 @@ class DeviceData(BaseModel):
     build_number: int
     """Monotonically increasing firmware build number."""
     led_mode: LedMode
-    wifi: Optional[Wifi] = None
+    wifi: Wifi | None = None
     """Connected Wi-Fi network information, when available."""
-    wifi_state: Optional[WifiState] = None
-    updatable_firmware_version: Optional[str] = None
+    wifi_state: WifiState | None = None
+    updatable_firmware_version: str | None = None
     """Firmware version available to install, or `None` when current."""
-    updatable_build_number: Optional[int] = None
+    updatable_build_number: int | None = None
     """Build number available to install, or `None` when current."""
-    last_checked_update: Optional[str] = None
+    last_checked_update: str | None = None
     """UTC ISO 8601 timestamp of the most recent update check."""
-    update: Optional[DeviceAutoUpdate] = None
-    action: Optional[DeviceAction] = None
-    pushlink: Optional[str] = None
-    overheating: Optional[bool] = None
+    update: DeviceAutoUpdate | None = None
+    action: DeviceAction | None = None
+    pushlink: str | None = None
+    overheating: bool | None = None
     """Critical power-supply voltage warning reported by the Sync Box."""
-    undervolt: Optional[bool] = None
+    undervolt: bool | None = None
     """Critical power-supply voltage warning reported by the Sync Box."""
-    bluetooth: Optional[bool] = None
-    capabilities: Optional[DeviceCapabilities] = None
+    bluetooth: bool | None = None
+    capabilities: DeviceCapabilities | None = None

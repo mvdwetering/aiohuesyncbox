@@ -28,14 +28,14 @@ classifiers = [
     "Topic :: Home Automation",
     "Topic :: Software Development :: Libraries",
 ]
-dependencies = ["aiohttp>=3.9.0", "mashumaro>=3.13"]
+dependencies = ["aiohttp>=3.13.2", "mashumaro>=3.22"]
 
 urls = { Homepage = "https://github.com/mvdwetering/aiohuesyncbox" } 
 
 [project.optional-dependencies]
 test = [
-  "mypy==1.11.0",
-  "ruff==0.5.5",
-  "pytest>=8.0.0",
-  "pytest-asyncio>=0.24.0",
+  "mypy==1.17.0",
+  "ruff==0.14.10",
+  "pytest>=9.1.1",
+  "pytest-asyncio>=1.4.0",
 ]

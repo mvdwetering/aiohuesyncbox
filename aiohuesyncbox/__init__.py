@@ -27,6 +27,7 @@ from .models import InputBehavior as InputBehavior
 from .models import ScanState as ScanState
 from .models import IrCode as IrCode
 from .models import Registration as Registration
+from .models import RegistrationCredentials as RegistrationCredentials
 from .models import Preset as Preset
 from .models import ConnectionState as ConnectionState
 from .models import CycleDirection as CycleDirection
@@ -79,6 +80,7 @@ __all__ = [
     "Preset",
     "Presets",
     "Registration",
+    "RegistrationCredentials",
     "RegistrationRole",
     "Registrations",
     "RequestError",

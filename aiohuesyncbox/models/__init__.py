@@ -39,6 +39,7 @@ from .ir import ScanUpdate as ScanUpdate
 
 from .registrations import Registration as Registration
 from .registrations import RegistrationCreate as RegistrationCreate
+from .registrations import RegistrationCredentials as RegistrationCredentials
 
 from .presets import Preset as Preset
 from .presets import PresetCreate as PresetCreate

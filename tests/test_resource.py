@@ -15,6 +15,7 @@ from aiohuesyncbox.models import (
     HueData,
     LedMode,
     Registration,
+    RegistrationCredentials,
 )
 from aiohuesyncbox.controllers.registrations import Registrations
 
@@ -217,3 +218,25 @@ async def test_collection_resource_delete_calls_correct_path():
     await registrations.delete("0")
 
     assert request.calls == [("delete", "/registrations/0", None)]
+
+
+async def test_registration_create_returns_typed_credentials():
+    request = FakeRequest()
+    request.response = {
+        "registrationId": "registration-id",
+        "accessToken": "access-token",
+    }
+    registrations = Registrations(request)
+
+    credentials = await registrations.create("Home Assistant", "Kitchen")
+
+    assert credentials == RegistrationCredentials(
+        registration_id="registration-id", access_token="access-token"
+    )
+    assert request.calls == [
+        (
+            "post",
+            "/registrations",
+            {"appName": "Home Assistant", "instanceName": "Kitchen"},
+        )
+    ]

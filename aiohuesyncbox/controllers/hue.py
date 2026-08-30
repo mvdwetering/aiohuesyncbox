@@ -1,4 +1,4 @@
-from ..models import GroupUpdate, HueData, HueUpdate, RequestFunc
+from ..models import Group, GroupUpdate, HueData, HueUpdate, RequestFunc
 from .base import Resource
 
 
@@ -7,6 +7,16 @@ class Hue(Resource[HueData]):
 
     def __init__(self, data: HueData, request: RequestFunc) -> None:
         super().__init__("/hue", data, request)
+
+    @property
+    def groups(self) -> list[Group]:
+        """Available entertainment areas."""
+        return list(self._data.groups.values())
+
+    @property
+    def groups_by_id(self) -> dict[str, Group]:
+        """Available entertainment areas keyed by API id."""
+        return self._data.groups
 
     async def set_group_active(self, id: str, active: bool) -> None:
         await self._request(

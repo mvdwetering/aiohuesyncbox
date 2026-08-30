@@ -5,12 +5,14 @@ import pytest
 from aiohuesyncbox.controllers.behavior import Behavior
 from aiohuesyncbox.controllers.device import Device
 from aiohuesyncbox.controllers.execution import Execution
+from aiohuesyncbox.controllers.hue import Hue
 from aiohuesyncbox.models import (
     BehaviorData,
     DeviceData,
     ExecutionData,
     ExecutionMode,
     HdmiSource,
+    HueData,
     LedMode,
     Registration,
 )
@@ -111,6 +113,29 @@ async def test_execution_set_state_serializes_enum_values():
             {"syncActive": True, "mode": "video", "hdmiSource": "input3"},
         )
     ]
+
+
+def test_hue_groups_iterate_groups_with_id_lookup():
+    hue = Hue(
+        HueData.from_dict(
+            {
+                "bridgeUniqueId": "001788FFFE000000",
+                "bridgeIpAddress": "192.168.1.8",
+                "connectionState": "connected",
+                "groups": {
+                    "area-id": {
+                        "name": "TV Area",
+                        "numLights": 5,
+                        "active": False,
+                    }
+                },
+            }
+        ),
+        FakeRequest(),
+    )
+
+    assert [group.name for group in hue.groups] == ["TV Area"]
+    assert hue.groups_by_id["area-id"].id == "area-id"
 
 
 @pytest.mark.asyncio

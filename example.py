@@ -60,7 +60,7 @@ async def main(args):
     # Cleanup in case the registration was done this run
     if registration_info and not args.skipunregister:
         # Unregister by registration ID. HueSyncBox needs to have a valid accessToken to execute this request
-        await box.unregister(registration_info["registration_id"])
+        await box.unregister(registration_info.registration_id)
 
     await box.close()
 

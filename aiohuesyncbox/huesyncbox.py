@@ -1,7 +1,8 @@
 import asyncio
 import logging
 import ssl
-from typing import Dict, Optional
+from types import TracebackType
+from typing import Self
 
 import aiohttp
 
@@ -22,7 +23,7 @@ class HueSyncBox:
         self,
         host: str,
         id: str,
-        access_token: Optional[str] = None,
+        access_token: str | None = None,
         port: int = 443,
         path: str = "/api",
     ) -> None:
@@ -44,12 +45,17 @@ class HueSyncBox:
         self.registrations = Registrations(self.request)
         self.presets = Presets(self.request)
 
-        self._last_response = None  # For debugging purposes
+        self._last_response: dict | None = None  # For debugging purposes
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
         return self
 
-    async def __aexit__(self, exc_type, exc, tb):
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         await self.close()
 
     async def _get_clientsession(self) -> aiohttp.ClientSession:
@@ -81,23 +87,22 @@ class HueSyncBox:
         return self._access_token
 
     @property
-    def last_response(self) -> Dict | None:
+    def last_response(self) -> dict | None:
         return self._last_response
 
-    async def is_registered(self):
+    async def is_registered(self) -> bool:
         try:
             await self.request("get", "/registrations")
             return True
         except Unauthorized:
             return False
-        return False
 
     async def register(
         self,
         application_name: str,
         instance_name: str,
         use_registered_token: bool = True,
-    ):
+    ) -> dict[str, str] | None:
         """
         Register with the huesyncbox
 
@@ -112,11 +117,11 @@ class HueSyncBox:
             self._access_token = info["access_token"]
         return info
 
-    async def unregister(self, registration_id: str):
+    async def unregister(self, registration_id: str) -> None:
         """Unregister application from the huesyncbox, you can only unregister the id associated with the token in use."""
         await self.registrations.delete(registration_id)
 
-    async def initialize(self):
+    async def initialize(self) -> None:
         await self.update()
         if self.device.api_level < MIN_API_LEVEL:
             logger.error(
@@ -124,11 +129,11 @@ class HueSyncBox:
                 MIN_API_LEVEL,
             )
 
-    async def close(self):
+    async def close(self) -> None:
         if self._clientsession is not None:
             await self._clientsession.close()
 
-    async def update(self):
+    async def update(self) -> None:
         response = await self.request("get", "")
         self._last_response = response
 
@@ -147,8 +152,8 @@ class HueSyncBox:
             self.presets.load(response["presets"])
 
     async def request(
-        self, method: str, path: str, data: Optional[Dict] = None, auth: bool = True
-    ):
+        self, method: str, path: str, data: dict | None = None, auth: bool = True
+    ) -> dict | None:
         """Make a request to the API."""
 
         if self._clientsession is None:
@@ -163,7 +168,7 @@ class HueSyncBox:
         url = f"https://{self._host}:{self._port}{self._path}/v1{path}"
 
         try:
-            logger.debug("%s, %s, %s" % (method, url, data))
+            logger.debug("%s, %s, %s", method, url, data)
 
             headers = {"Content-Type": "application/json"}
             if auth and self._access_token:
@@ -172,7 +177,8 @@ class HueSyncBox:
             async with self._clientsession.request(
                 method, url, json=data, headers=headers, server_hostname=self._id
             ) as resp:
-                logger.debug("%s, %s" % (resp.status, await resp.text("utf-8")))
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug("%s, %s", resp.status, await resp.text("utf-8"))
 
                 data = None
                 if resp.content_type == "application/json":
@@ -181,9 +187,7 @@ class HueSyncBox:
                         if isinstance(data, dict):
                             _raise_on_error(data)
                         else:
-                            logger.error(
-                                "Received unexpected data format: %s" % str(data)
-                            )
+                            logger.error("Received unexpected data format: %s", data)
                 return data
         except aiohttp.ClientError as err:
             logger.debug(err, exc_info=True)
@@ -193,6 +197,6 @@ class HueSyncBox:
             raise RequestError(f"Timeout requesting data from {self._host}") from err
 
 
-def _raise_on_error(data: Dict):
+def _raise_on_error(data: dict) -> None:
     """Check response for error message."""
     raise_error(data["code"], data["message"])

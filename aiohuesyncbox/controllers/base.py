@@ -1,6 +1,6 @@
 """Base 'controller' classes that bind pure data models to API paths + requests."""
 
-from typing import Any, Dict, Generic, Iterator, Optional, Type, TypeVar
+from typing import Any, Generic, Iterator, TypeVar
 
 from ..models import BaseModel, RequestFunc
 
@@ -33,7 +33,7 @@ class Resource(Generic[T]):
     def __repr__(self) -> str:
         return repr(self._data)
 
-    async def _put(self, data: Dict[str, Any]) -> None:
+    async def _put(self, data: dict[str, Any]) -> None:
         await self._request("put", self._path, data=data)
 
     async def update(self) -> None:
@@ -48,11 +48,11 @@ class CollectionResource(Generic[TItem]):
     itself is a `{id: item}` map (e.g. /registrations, /presets).
     """
 
-    def __init__(self, path: str, item_cls: Type[TItem], request: RequestFunc) -> None:
+    def __init__(self, path: str, item_cls: type[TItem], request: RequestFunc) -> None:
         self._path = path
         self._item_cls = item_cls
         self._request = request
-        self._items: Dict[str, TItem] = {}
+        self._items: dict[str, TItem] = {}
 
     def __iter__(self) -> Iterator[TItem]:
         return iter(self._items.values())
@@ -66,7 +66,7 @@ class CollectionResource(Generic[TItem]):
     def __contains__(self, id: str) -> bool:
         return id in self._items
 
-    def get(self, id: str) -> Optional[TItem]:
+    def get(self, id: str) -> TItem | None:
         return self._items.get(id)
 
     async def update(self) -> None:
@@ -75,7 +75,7 @@ class CollectionResource(Generic[TItem]):
         if response is not None:
             self.load(response)
 
-    def load(self, response: Dict[str, Any]) -> None:
+    def load(self, response: dict[str, Any]) -> None:
         """Populate items from an already-fetched `{id: item}` response."""
         items = {}
         for id, raw in response.items():

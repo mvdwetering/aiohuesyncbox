@@ -7,7 +7,7 @@ class OpenStrEnum(StrEnum):
     """String enum that preserves values added by later firmware releases."""
 
     @classmethod
-    def _missing_(cls, value: object):
+    def _missing_(cls, value: object) -> "OpenStrEnum | None":
         if not isinstance(value, str):
             return None
         member = str.__new__(cls, value)

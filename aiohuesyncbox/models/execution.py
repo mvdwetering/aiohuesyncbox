@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 from .base import BaseModel, UpdateModel
 from .enums import CycleDirection, ExecutionMode, HdmiSource, Intensity, MusicPalette, SyncMode
@@ -30,22 +29,22 @@ class MusicMode(BaseModel):
 class ExecutionUpdate(UpdateModel):
     """Partial state change accepted by the `/execution` endpoint."""
 
-    sync_active: Optional[bool] = None
-    toggle_sync_active: Optional[bool] = None
-    hdmi_active: Optional[bool] = None
-    toggle_hdmi_active: Optional[bool] = None
-    mode: Optional[ExecutionMode] = None
-    cycle_sync_mode: Optional[CycleDirection] = None
-    hdmi_source: Optional[HdmiSource] = None
-    cycle_hdmi_source: Optional[CycleDirection] = None
-    brightness: Optional[int] = None
-    increment_brightness: Optional[int] = None
-    intensity: Optional[Intensity] = None
-    cycle_intensity: Optional[CycleDirection] = None
-    video: Optional[VideoMode] = None
-    game: Optional[GameMode] = None
-    music: Optional[MusicMode] = None
-    hue_target: Optional[str] = None
+    sync_active: bool | None = None
+    toggle_sync_active: bool | None = None
+    hdmi_active: bool | None = None
+    toggle_hdmi_active: bool | None = None
+    mode: ExecutionMode | None = None
+    cycle_sync_mode: CycleDirection | None = None
+    hdmi_source: HdmiSource | None = None
+    cycle_hdmi_source: CycleDirection | None = None
+    brightness: int | None = None
+    increment_brightness: int | None = None
+    intensity: Intensity | None = None
+    cycle_intensity: CycleDirection | None = None
+    video: VideoMode | None = None
+    game: GameMode | None = None
+    music: MusicMode | None = None
+    hue_target: str | None = None
 
 
 @dataclass
@@ -68,5 +67,5 @@ class ExecutionData(BaseModel):
     video: VideoMode
     game: GameMode
     music: MusicMode
-    preset: Optional[str] = None
+    preset: str | None = None
     """Identifier of the preset currently being executed, when one is active."""

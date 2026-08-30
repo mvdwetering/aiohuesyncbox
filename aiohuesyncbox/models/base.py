@@ -2,7 +2,7 @@
 
 import re
 from dataclasses import dataclass
-from typing import Any, Awaitable, Callable, Dict
+from typing import Any, Awaitable, Callable
 
 from mashumaro.config import BaseConfig
 from mashumaro.mixins.dict import DataClassDictMixin
@@ -28,10 +28,10 @@ class BaseModel(DataClassDictMixin):
         pass
 
     @classmethod
-    def __pre_deserialize__(cls, d: Dict[str, Any]) -> Dict[str, Any]:
+    def __pre_deserialize__(cls, d: dict[str, Any]) -> dict[str, Any]:
         return {camel_to_snake(key): value for key, value in d.items()}
 
-    def __post_serialize__(self, d: Dict[str, Any]) -> Dict[str, Any]:
+    def __post_serialize__(self, d: dict[str, Any]) -> dict[str, Any]:
         return {snake_to_camel(key): value for key, value in d.items()}
 
 

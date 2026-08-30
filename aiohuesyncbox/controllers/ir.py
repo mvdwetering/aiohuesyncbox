@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ..models import IrCode, IrCodeUpdate, IrData, RequestFunc, ScanUpdate
 from .base import Resource
@@ -15,7 +15,7 @@ class Ir(Resource[IrData]):
         await self._request("put", "/ir/scan", data=ScanUpdate(scanning=scanning).to_dict())
 
     async def set_code(
-        self, code: str, name: str, execution: Dict[str, Any]
+        self, code: str, name: str, execution: dict[str, Any]
     ) -> None:
         """Create or update an IR code mapping."""
         await self._request(
@@ -27,5 +27,5 @@ class Ir(Resource[IrData]):
     async def delete_code(self, code: str) -> None:
         await self._request("delete", f"/ir/codes/{code}")
 
-    def get_code(self, code: str) -> Optional[IrCode]:
+    def get_code(self, code: str) -> IrCode | None:
         return self._data.codes.get(code)

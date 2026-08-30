@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
-from zeroconf import ServiceBrowser, Zeroconf
+from zeroconf import ServiceBrowser, ServiceListener, Zeroconf
 
 
-class MyListener:
+class MyListener(ServiceListener):
     def update_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         pass
 
-    def remove_service(self, zeroconf, type, name):
+    def remove_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         print("Service %s removed" % (name,))
 
-    def add_service(self, zeroconf, type, name):
-        info = zeroconf.get_service_info(type, name)
+    def add_service(self, zc: Zeroconf, type_: str, name: str) -> None:
+        info = zc.get_service_info(type_, name)
         print("Service %s added, service info: %s" % (name, info))
 
 

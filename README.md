@@ -84,8 +84,8 @@ There is also an example on using `zeroconf` for device discovery.
     # Turn the box on, start syncing with video mode on input 4
     await box.execution.set_state(sync_active=True, mode="video", hdmi_source="input4")
 
-    # Call update() to update with latest status from the box
-    await box.execution.update()
+    # Call refresh() to update with latest status from the box
+    await box.execution.refresh()
     print(box.execution.sync_active)
     print(box.execution.mode)
 ```

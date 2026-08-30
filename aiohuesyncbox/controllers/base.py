@@ -36,7 +36,7 @@ class Resource(Generic[T]):
     async def _put(self, data: dict[str, Any]) -> None:
         await self._request("put", self._path, data=data)
 
-    async def update(self) -> None:
+    async def refresh(self) -> None:
         """Refresh from the device."""
         response = await self._request("get", self._path)
         if response:
@@ -69,7 +69,7 @@ class CollectionResource(Generic[TItem]):
     def get(self, id: str) -> TItem | None:
         return self._items.get(id)
 
-    async def update(self) -> None:
+    async def refresh(self) -> None:
         """Refresh from the device."""
         response = await self._request("get", self._path)
         if response is not None:

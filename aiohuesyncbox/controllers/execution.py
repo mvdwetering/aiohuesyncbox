@@ -1,10 +1,27 @@
+from typing import TYPE_CHECKING
+
 from ..models import ExecutionData, ExecutionUpdate, GameMode, MusicMode, RequestFunc, VideoMode
-from ..models.enums import CycleDirection, ExecutionMode, HdmiSource, Intensity
+from ..models.enums import CycleDirection, ExecutionMode, HdmiSource, Intensity, SyncMode
 from .base import Resource
 
 
 class Execution(Resource[ExecutionData]):
     """Control the Execution resource of the huesyncbox."""
+
+    if TYPE_CHECKING:
+        # __getattr__ delegates these to self._data at runtime; declared here
+        # only so type checkers see real types instead of Any.
+        sync_active: bool
+        hdmi_active: bool
+        mode: ExecutionMode
+        last_sync_mode: SyncMode
+        hdmi_source: HdmiSource
+        hue_target: str
+        brightness: int
+        video: VideoMode
+        game: GameMode
+        music: MusicMode
+        preset: str | None
 
     def __init__(self, data: ExecutionData, request: RequestFunc) -> None:
         super().__init__("/execution", data, request)

@@ -1,9 +1,19 @@
+from typing import TYPE_CHECKING
+
 from ..models import Group, GroupUpdate, HueData, HueUpdate, RequestFunc
+from ..models.enums import ConnectionState
 from .base import Resource
 
 
 class Hue(Resource[HueData]):
     """Control the Hue resource of the huesyncbox."""
+
+    if TYPE_CHECKING:
+        # __getattr__ delegates these to self._data at runtime; declared here
+        # only so type checkers see real types instead of Any.
+        bridge_unique_id: str
+        bridge_ip_address: str
+        connection_state: ConnectionState
 
     def __init__(self, data: HueData, request: RequestFunc) -> None:
         super().__init__("/hue", data, request)

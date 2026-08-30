@@ -52,7 +52,7 @@ async def main(args):
     )
 
     # Call update() to update with latest status of the box
-    await box.execution.update()
+    await box.execution.refresh()
     print(box.execution.sync_active)
     print(box.execution.mode)
     print(box.execution.hdmi_source)

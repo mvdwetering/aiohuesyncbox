@@ -130,7 +130,7 @@ class HueSyncBox:
         await self.registrations.delete(registration_id)
 
     async def initialize(self) -> None:
-        await self.update()
+        await self.refresh()
         if self.device.api_level < MIN_API_LEVEL:
             logger.error(
                 "This library requires at least API version %s. Please update the Philips Hue Play HDMI Sync Box.",
@@ -141,7 +141,7 @@ class HueSyncBox:
         if self._clientsession is not None:
             await self._clientsession.close()
 
-    async def update(self) -> None:
+    async def refresh(self) -> None:
         response = await self.request("get", "")
         self._last_response = response
 

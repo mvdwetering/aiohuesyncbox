@@ -64,12 +64,12 @@ async def test_resource_mutation_calls_put_on_correct_path():
     assert request.calls == [("put", "/device", {"ledMode": 2})]
 
 
-async def test_resource_update_replaces_underlying_data():
+async def test_resource_refresh_replaces_underlying_data():
     request = FakeRequest()
     device = Device(_device_data(led_mode=1), request)
     request.response = _device_raw(led_mode=2)
 
-    await device.update()
+    await device.refresh()
 
     assert request.calls == [("get", "/device", None)]
     assert device.led_mode is LedMode.DIMMED
@@ -180,7 +180,7 @@ async def test_collection_resource_loads_items_keyed_by_id():
     assert registration.app_name == "Hue Sync Android"
 
 
-async def test_collection_resource_update_clears_items_for_empty_response():
+async def test_collection_resource_refresh_clears_items_for_empty_response():
     request = FakeRequest()
     registrations = Registrations(request)
     registrations.load(
@@ -196,7 +196,7 @@ async def test_collection_resource_update_clears_items_for_empty_response():
     )
     request.response = {}
 
-    await registrations.update()
+    await registrations.refresh()
 
     assert len(registrations) == 0
 

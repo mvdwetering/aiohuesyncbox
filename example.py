@@ -4,7 +4,7 @@ import argparse
 import logging
 import asyncio
 
-from aiohuesyncbox import HueSyncBox, InvalidState
+from aiohuesyncbox import ExecutionMode, HdmiSource, HueSyncBox, InvalidState
 
 
 async def main(args):
@@ -45,7 +45,11 @@ async def main(args):
     print(box.execution.hdmi_source)
 
     # Turn the box on (assuming it was off), start syncing on input 3
-    await box.execution.set_state(sync_active=True, mode="video", hdmi_source="input3")
+    await box.execution.set_state(
+        sync_active=True,
+        mode=ExecutionMode.VIDEO,
+        hdmi_source=HdmiSource.INPUT3,
+    )
 
     # Call update() to update with latest status of the box
     await box.execution.update()

@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import ssl
+from types import TracebackType
 from typing import Self
 
 import aiohttp
@@ -44,12 +45,17 @@ class HueSyncBox:
         self.registrations = Registrations(self.request)
         self.presets = Presets(self.request)
 
-        self._last_response = None  # For debugging purposes
+        self._last_response: dict | None = None  # For debugging purposes
 
     async def __aenter__(self) -> Self:
         return self
 
-    async def __aexit__(self, exc_type, exc, tb):
+    async def __aexit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: TracebackType | None,
+    ) -> None:
         await self.close()
 
     async def _get_clientsession(self) -> aiohttp.ClientSession:
@@ -84,7 +90,7 @@ class HueSyncBox:
     def last_response(self) -> dict | None:
         return self._last_response
 
-    async def is_registered(self):
+    async def is_registered(self) -> bool:
         try:
             await self.request("get", "/registrations")
             return True
@@ -96,7 +102,7 @@ class HueSyncBox:
         application_name: str,
         instance_name: str,
         use_registered_token: bool = True,
-    ):
+    ) -> dict[str, str] | None:
         """
         Register with the huesyncbox
 
@@ -111,11 +117,11 @@ class HueSyncBox:
             self._access_token = info["access_token"]
         return info
 
-    async def unregister(self, registration_id: str):
+    async def unregister(self, registration_id: str) -> None:
         """Unregister application from the huesyncbox, you can only unregister the id associated with the token in use."""
         await self.registrations.delete(registration_id)
 
-    async def initialize(self):
+    async def initialize(self) -> None:
         await self.update()
         if self.device.api_level < MIN_API_LEVEL:
             logger.error(
@@ -123,11 +129,11 @@ class HueSyncBox:
                 MIN_API_LEVEL,
             )
 
-    async def close(self):
+    async def close(self) -> None:
         if self._clientsession is not None:
             await self._clientsession.close()
 
-    async def update(self):
+    async def update(self) -> None:
         response = await self.request("get", "")
         self._last_response = response
 
@@ -147,7 +153,7 @@ class HueSyncBox:
 
     async def request(
         self, method: str, path: str, data: dict | None = None, auth: bool = True
-    ):
+    ) -> dict | None:
         """Make a request to the API."""
 
         if self._clientsession is None:
@@ -191,6 +197,6 @@ class HueSyncBox:
             raise RequestError(f"Timeout requesting data from {self._host}") from err
 
 
-def _raise_on_error(data: dict):
+def _raise_on_error(data: dict) -> None:
     """Check response for error message."""
     raise_error(data["code"], data["message"])

@@ -33,3 +33,11 @@ class RegistrationCreate(BaseModel):
     """User-recognizable application name."""
     instance_name: str
     """User name or device name associated with the registration."""
+
+
+@dataclass
+class RegistrationCredentials(BaseModel):
+    """Credentials returned after registering an application instance."""
+
+    registration_id: str
+    access_token: str

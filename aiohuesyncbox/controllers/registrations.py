@@ -1,4 +1,9 @@
-from ..models import Registration, RegistrationCreate, RequestFunc
+from ..models import (
+    Registration,
+    RegistrationCreate,
+    RegistrationCredentials,
+    RequestFunc,
+)
 from .base import CollectionResource
 
 
@@ -10,7 +15,7 @@ class Registrations(CollectionResource[Registration]):
 
     async def create(
         self, application_name: str, instance_name: str
-    ) -> dict[str, str] | None:
+    ) -> RegistrationCredentials | None:
         """Register a new application/instance.
 
         Make sure to _not_ use a possibly invalid token for this request, as
@@ -27,7 +32,4 @@ class Registrations(CollectionResource[Registration]):
         )
         if not response:
             return None
-        return {
-            "registration_id": response["registrationId"],
-            "access_token": response["accessToken"],
-        }
+        return RegistrationCredentials.from_dict(response)

@@ -7,7 +7,15 @@ from typing import Self
 import aiohttp
 
 from .controllers import Behavior, Device, Execution, Hdmi, Hue, Ir, Presets, Registrations
-from .models import BehaviorData, DeviceData, ExecutionData, HdmiData, IrData, HueData
+from .models import (
+    BehaviorData,
+    DeviceData,
+    ExecutionData,
+    HdmiData,
+    HueData,
+    IrData,
+    RegistrationCredentials,
+)
 from .errors import raise_error, RequestError, Unauthorized
 from .hsb_cacert import HSB_CACERT
 
@@ -102,7 +110,7 @@ class HueSyncBox:
         application_name: str,
         instance_name: str,
         use_registered_token: bool = True,
-    ) -> dict[str, str] | None:
+    ) -> RegistrationCredentials | None:
         """
         Register with the huesyncbox
 
@@ -114,7 +122,7 @@ class HueSyncBox:
         """
         info = await self.registrations.create(application_name, instance_name)
         if info and use_registered_token:
-            self._access_token = info["access_token"]
+            self._access_token = info.access_token
         return info
 
     async def unregister(self, registration_id: str) -> None:

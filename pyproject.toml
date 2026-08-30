@@ -14,7 +14,7 @@ name = "aiohuesyncbox"
 version = "0.0.31"
 description = "Asyncio package to communicate with a Philips Hue Play HDMI Sync Box."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 authors = [
   {name = "Michel van de Wetering", email = "michel.van.de.wetering@gmail.com" },
 ]
@@ -28,7 +28,7 @@ classifiers = [
     "Topic :: Home Automation",
     "Topic :: Software Development :: Libraries",
 ]
-dependencies = ["aiohttp>=3.9.0"]
+dependencies = ["aiohttp>=3.9.0", "mashumaro>=3.13"]
 
 urls = { Homepage = "https://github.com/mvdwetering/aiohuesyncbox" } 
 
@@ -36,4 +36,6 @@ urls = { Homepage = "https://github.com/mvdwetering/aiohuesyncbox" }
 test = [
   "mypy==1.11.0",
   "ruff==0.5.5",
+  "pytest>=8.0.0",
+  "pytest-asyncio>=0.24.0",
 ]

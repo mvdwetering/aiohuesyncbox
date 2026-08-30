@@ -5,11 +5,8 @@ from typing import Dict, Optional
 
 import aiohttp
 
-from .behavior import Behavior
-from .device import Device
-from .execution import Execution
-from .hue import Hue
-from .hdmi import Hdmi
+from .controllers import Behavior, Device, Execution, Hdmi, Hue, Ir, Presets, Registrations
+from .models import BehaviorData, DeviceData, ExecutionData, HdmiData, IrData, HueData
 from .errors import raise_error, RequestError, Unauthorized
 from .hsb_cacert import HSB_CACERT
 
@@ -43,6 +40,9 @@ class HueSyncBox:
         self.execution: Execution
         self.hdmi: Hdmi
         self.hue: Hue
+        self.ir: Ir
+        self.registrations = Registrations(self.request)
+        self.presets = Presets(self.request)
 
         self._last_response = None  # For debugging purposes
 
@@ -107,28 +107,14 @@ class HueSyncBox:
 
         returns registration info on success
         """
-        response = await self.request(
-            "post",
-            "/registrations",
-            {"appName": application_name, "instanceName": instance_name},
-            auth=False,
-        )  # Make sure to _not_ use a possibly invalid token as it will be rejected
-
-        info = None
-        if response:
-            info = {
-                "registration_id": response["registrationId"],
-                "access_token": response["accessToken"],
-            }
-
-            if use_registered_token:
-                self._access_token = info["access_token"]
-
+        info = await self.registrations.create(application_name, instance_name)
+        if info and use_registered_token:
+            self._access_token = info["access_token"]
         return info
 
     async def unregister(self, registration_id: str):
         """Unregister application from the huesyncbox, you can only unregister the id associated with the token in use."""
-        await self.request("delete", f"/registrations/{registration_id}")
+        await self.registrations.delete(registration_id)
 
     async def initialize(self):
         await self.update()
@@ -147,11 +133,18 @@ class HueSyncBox:
         self._last_response = response
 
         if response:
-            self.behavior = Behavior(response["behavior"], self.request)
-            self.device = Device(response["device"], self.request)
-            self.execution = Execution(response["execution"], self.request)
-            self.hue = Hue(response["hue"], self.request)
-            self.hdmi = Hdmi(response["hdmi"], self.request)
+            self.behavior = Behavior(
+                BehaviorData.from_dict(response["behavior"]), self.request
+            )
+            self.device = Device(DeviceData.from_dict(response["device"]), self.request)
+            self.execution = Execution(
+                ExecutionData.from_dict(response["execution"]), self.request
+            )
+            self.hue = Hue(HueData.from_dict(response["hue"]), self.request)
+            self.hdmi = Hdmi(HdmiData.from_dict(response["hdmi"]), self.request)
+            self.ir = Ir(IrData.from_dict(response["ir"]), self.request)
+            self.registrations.load(response["registrations"])
+            self.presets.load(response["presets"])
 
     async def request(
         self, method: str, path: str, data: Optional[Dict] = None, auth: bool = True

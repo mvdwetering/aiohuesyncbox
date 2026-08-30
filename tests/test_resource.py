@@ -1,0 +1,102 @@
+from typing import Any, Optional
+
+import pytest
+
+from aiohuesyncbox.controllers.device import Device
+from aiohuesyncbox.models import DeviceData, LedMode, Registration
+from aiohuesyncbox.controllers.registrations import Registrations
+
+
+def _device_raw(led_mode: int = 1) -> dict:
+    return {
+        "name": "My Sync Box",
+        "deviceType": "HSB1",
+        "uniqueId": "C42996000000",
+        "apiLevel": 7,
+        "firmwareVersion": "1.7.4",
+        "buildNumber": 1,
+        "ipAddress": "192.168.1.12",
+        "ledMode": led_mode,
+    }
+
+
+def _device_data(led_mode: int = 1) -> DeviceData:
+    return DeviceData.from_dict(_device_raw(led_mode))
+
+
+
+class FakeRequest:
+    """Records calls and returns canned responses, standing in for HueSyncBox.request."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple] = []
+        self.response: Optional[dict[str, Any]] = None
+
+    async def __call__(self, method, path, data=None, auth=True):
+        self.calls.append((method, path, data))
+        return self.response
+
+
+@pytest.mark.asyncio
+async def test_resource_delegates_field_access_to_data():
+    device = Device(_device_data(), FakeRequest())
+
+    assert device.name == "My Sync Box"
+    assert device.led_mode is LedMode.REGULAR
+
+
+@pytest.mark.asyncio
+async def test_resource_mutation_calls_put_on_correct_path():
+    request = FakeRequest()
+    device = Device(_device_data(), request)
+
+    await device.set_led_mode(LedMode.DIMMED)
+
+    assert request.calls == [("put", "/device", {"ledMode": 2})]
+
+
+@pytest.mark.asyncio
+async def test_resource_update_replaces_underlying_data():
+    request = FakeRequest()
+    device = Device(_device_data(led_mode=1), request)
+    request.response = _device_raw(led_mode=2)
+
+    await device.update()
+
+    assert request.calls == [("get", "/device", None)]
+    assert device.led_mode is LedMode.DIMMED
+
+
+
+@pytest.mark.asyncio
+async def test_collection_resource_loads_items_keyed_by_id():
+    request = FakeRequest()
+    registrations = Registrations(request)
+
+    registrations.load(
+        {
+            "0": {
+                "appName": "Hue Sync Android",
+                "instanceName": "Pixel",
+                "role": "admin",
+                "lastUsed": "2020-02-16T05:45:20Z",
+                "created": "2020-01-11T05:45:20Z",
+            }
+        }
+    )
+
+    assert len(registrations) == 1
+    registration = registrations["0"]
+    assert isinstance(registration, Registration)
+    assert registration.id == "0"
+    assert registration.app_name == "Hue Sync Android"
+
+
+@pytest.mark.asyncio
+async def test_collection_resource_delete_calls_correct_path():
+    request = FakeRequest()
+    registrations = Registrations(request)
+
+    await registrations.delete("0")
+
+    assert request.calls == [("delete", "/registrations/0", None)]

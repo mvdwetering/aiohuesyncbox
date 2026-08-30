@@ -4,7 +4,16 @@ import pytest
 
 from aiohuesyncbox.controllers.behavior import Behavior
 from aiohuesyncbox.controllers.device import Device
-from aiohuesyncbox.models import BehaviorData, DeviceData, LedMode, Registration
+from aiohuesyncbox.controllers.execution import Execution
+from aiohuesyncbox.models import (
+    BehaviorData,
+    DeviceData,
+    ExecutionData,
+    ExecutionMode,
+    HdmiSource,
+    LedMode,
+    Registration,
+)
 from aiohuesyncbox.controllers.registrations import Registrations
 
 
@@ -66,6 +75,42 @@ async def test_resource_update_replaces_underlying_data():
 
     assert request.calls == [("get", "/device", None)]
     assert device.led_mode is LedMode.DIMMED
+
+
+@pytest.mark.asyncio
+async def test_execution_set_state_serializes_enum_values():
+    request = FakeRequest()
+    execution = Execution(
+        ExecutionData.from_dict(
+            {
+                "syncActive": False,
+                "hdmiActive": True,
+                "mode": "passthrough",
+                "lastSyncMode": "video",
+                "hdmiSource": "input1",
+                "hueTarget": "groups/1",
+                "brightness": 100,
+                "video": {"intensity": "moderate", "backgroundLighting": True},
+                "game": {"intensity": "moderate", "backgroundLighting": True},
+                "music": {"intensity": "moderate", "palette": "neutral"},
+            }
+        ),
+        request,
+    )
+
+    await execution.set_state(
+        sync_active=True,
+        mode=ExecutionMode.VIDEO,
+        hdmi_source=HdmiSource.INPUT3,
+    )
+
+    assert request.calls == [
+        (
+            "put",
+            "/execution",
+            {"syncActive": True, "mode": "video", "hdmiSource": "input3"},
+        )
+    ]
 
 
 @pytest.mark.asyncio

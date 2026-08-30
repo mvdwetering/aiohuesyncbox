@@ -90,7 +90,6 @@ class HueSyncBox:
             return True
         except Unauthorized:
             return False
-        return False
 
     async def register(
         self,
@@ -163,7 +162,7 @@ class HueSyncBox:
         url = f"https://{self._host}:{self._port}{self._path}/v1{path}"
 
         try:
-            logger.debug("%s, %s, %s" % (method, url, data))
+            logger.debug("%s, %s, %s", method, url, data)
 
             headers = {"Content-Type": "application/json"}
             if auth and self._access_token:
@@ -172,7 +171,8 @@ class HueSyncBox:
             async with self._clientsession.request(
                 method, url, json=data, headers=headers, server_hostname=self._id
             ) as resp:
-                logger.debug("%s, %s" % (resp.status, await resp.text("utf-8")))
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug("%s, %s", resp.status, await resp.text("utf-8"))
 
                 data = None
                 if resp.content_type == "application/json":
@@ -181,9 +181,7 @@ class HueSyncBox:
                         if isinstance(data, dict):
                             _raise_on_error(data)
                         else:
-                            logger.error(
-                                "Received unexpected data format: %s" % str(data)
-                            )
+                            logger.error("Received unexpected data format: %s", data)
                 return data
         except aiohttp.ClientError as err:
             logger.debug(err, exc_info=True)

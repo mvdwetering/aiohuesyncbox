@@ -1,7 +1,5 @@
 from typing import Any, Optional
 
-import pytest
-
 from aiohuesyncbox.controllers.behavior import Behavior
 from aiohuesyncbox.controllers.device import Device
 from aiohuesyncbox.controllers.execution import Execution
@@ -50,7 +48,6 @@ class FakeRequest:
         return self.response
 
 
-@pytest.mark.asyncio
 async def test_resource_delegates_field_access_to_data():
     device = Device(_device_data(), FakeRequest())
 
@@ -58,7 +55,6 @@ async def test_resource_delegates_field_access_to_data():
     assert device.led_mode is LedMode.REGULAR
 
 
-@pytest.mark.asyncio
 async def test_resource_mutation_calls_put_on_correct_path():
     request = FakeRequest()
     device = Device(_device_data(), request)
@@ -68,7 +64,6 @@ async def test_resource_mutation_calls_put_on_correct_path():
     assert request.calls == [("put", "/device", {"ledMode": 2})]
 
 
-@pytest.mark.asyncio
 async def test_resource_update_replaces_underlying_data():
     request = FakeRequest()
     device = Device(_device_data(led_mode=1), request)
@@ -80,7 +75,6 @@ async def test_resource_update_replaces_underlying_data():
     assert device.led_mode is LedMode.DIMMED
 
 
-@pytest.mark.asyncio
 async def test_execution_set_state_serializes_enum_values():
     request = FakeRequest()
     execution = Execution(
@@ -139,7 +133,6 @@ def test_hue_groups_iterate_groups_with_id_lookup():
     assert hue.groups_by_id["area-id"].id == "area-id"
 
 
-@pytest.mark.asyncio
 async def test_force_dovi_native_uses_boolean_controller_api():
     request = FakeRequest()
     behavior = Behavior(
@@ -164,7 +157,6 @@ async def test_force_dovi_native_uses_boolean_controller_api():
 
 
 
-@pytest.mark.asyncio
 async def test_collection_resource_loads_items_keyed_by_id():
     request = FakeRequest()
     registrations = Registrations(request)
@@ -188,7 +180,6 @@ async def test_collection_resource_loads_items_keyed_by_id():
     assert registration.app_name == "Hue Sync Android"
 
 
-@pytest.mark.asyncio
 async def test_collection_resource_update_clears_items_for_empty_response():
     request = FakeRequest()
     registrations = Registrations(request)
@@ -210,7 +201,6 @@ async def test_collection_resource_update_clears_items_for_empty_response():
     assert len(registrations) == 0
 
 
-@pytest.mark.asyncio
 async def test_collection_resource_delete_calls_correct_path():
     request = FakeRequest()
     registrations = Registrations(request)

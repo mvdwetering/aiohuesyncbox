@@ -9,7 +9,6 @@ from mashumaro.mixins.dict import DataClassDictMixin
 
 _CAMEL_RE = re.compile(r"_([a-z0-9])")
 
-#: Signature of `HueSyncBox.request`, passed down to resources so they can do their own PUT/GET calls.
 RequestFunc = Callable[..., Awaitable[Any]]
 
 
@@ -26,8 +25,6 @@ class BaseModel(DataClassDictMixin):
     """Base for API models, translates camelCase JSON keys <-> snake_case fields."""
 
     class Config(BaseConfig):
-        # Every nested dataclass field also goes through from/to dict, so
-        # this hook naturally applies recursively.
         pass
 
     @classmethod
@@ -36,3 +33,11 @@ class BaseModel(DataClassDictMixin):
 
     def __post_serialize__(self, d: Dict[str, Any]) -> Dict[str, Any]:
         return {snake_to_camel(key): value for key, value in d.items()}
+
+
+@dataclass
+class UpdateModel(BaseModel):
+    """Base for partial API updates that omits unspecified fields."""
+
+    class Config(BaseConfig):
+        omit_none = True

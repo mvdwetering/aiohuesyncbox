@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from ..models import IrCode, IrData, RequestFunc
+from ..models import IrCode, IrCodeUpdate, IrData, RequestFunc, ScanUpdate
 from .base import Resource
 
 
@@ -12,7 +12,7 @@ class Ir(Resource[IrData]):
 
     async def set_scanning(self, scanning: bool) -> None:
         """Enable/disable IR code scanning mode."""
-        await self._request("put", "/ir/scan", data={"scanning": scanning})
+        await self._request("put", "/ir/scan", data=ScanUpdate(scanning=scanning).to_dict())
 
     async def set_code(
         self, code: str, name: str, execution: Dict[str, Any]
@@ -21,7 +21,7 @@ class Ir(Resource[IrData]):
         await self._request(
             "put",
             f"/ir/codes/{code}",
-            data={"name": name, "execution": execution},
+            data=IrCodeUpdate(name=name, execution=execution).to_dict(),
         )
 
     async def delete_code(self, code: str) -> None:

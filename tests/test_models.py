@@ -14,6 +14,8 @@ from aiohuesyncbox.models import (
     Intensity,
     LedMode,
     MusicPalette,
+    ExecutionUpdate,
+    HueUpdate,
     PortStatus,
     PortType,
     Registration,
@@ -232,3 +234,18 @@ def test_registration_role_parses_as_enum():
     )
 
     assert registration.role is RegistrationRole.ADMIN
+
+
+def test_update_models_serialize_partial_camel_case_payloads():
+    execution = ExecutionUpdate(
+        sync_active=True,
+        hdmi_source=HdmiSource.INPUT2,
+        brightness=None,
+    )
+    hue = HueUpdate(bridge_unique_id="001788FFFE000000", username="user")
+
+    assert execution.to_dict() == {"syncActive": True, "hdmiSource": "input2"}
+    assert hue.to_dict() == {
+        "bridgeUniqueId": "001788FFFE000000",
+        "username": "user",
+    }

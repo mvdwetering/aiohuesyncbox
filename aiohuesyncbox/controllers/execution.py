@@ -1,6 +1,6 @@
 from typing import Optional
 
-from ..models import ExecutionData, GameMode, MusicMode, RequestFunc, VideoMode
+from ..models import ExecutionData, ExecutionUpdate, GameMode, MusicMode, RequestFunc, VideoMode
 from ..models.enums import CycleDirection, ExecutionMode, HdmiSource, Intensity
 from .base import Resource
 
@@ -13,31 +13,34 @@ class Execution(Resource[ExecutionData]):
 
     async def toggle_sync_active(self) -> None:
         """Toggle sync_active."""
-        await self._put({"toggleSyncActive": True})
+        await self._put(ExecutionUpdate(toggle_sync_active=True).to_dict())
 
     async def toggle_hdmi_active(self) -> None:
         """Toggle hdmi_active."""
-        await self._put({"toggleHdmiActive": True})
+        await self._put(ExecutionUpdate(toggle_hdmi_active=True).to_dict())
 
     async def cycle_sync_mode(self, next: bool = True) -> None:
         """Cycle through sync modes."""
-        await self._put({"cycleSyncMode": "next" if next else "previous"})
+        direction = CycleDirection.NEXT if next else CycleDirection.PREVIOUS
+        await self._put(ExecutionUpdate(cycle_sync_mode=direction).to_dict())
 
     async def cycle_hdmi_source(self, next: bool = True) -> None:
         """Cycle through HDMI sources."""
-        await self._put({"cycleHdmiSource": "next" if next else "previous"})
+        direction = CycleDirection.NEXT if next else CycleDirection.PREVIOUS
+        await self._put(ExecutionUpdate(cycle_hdmi_source=direction).to_dict())
 
     async def increment_brightness(self, step: int) -> None:
         """Increment brightness step should be within -200, 200."""
-        await self._put({"incrementBrightness": step})
+        await self._put(ExecutionUpdate(increment_brightness=step).to_dict())
 
     async def cycle_intensity(self, next: bool = True) -> None:
         """Cycle through intensities of current mode if syncing."""
-        await self._put({"cycleIntensity": "next" if next else "previous"})
+        direction = CycleDirection.NEXT if next else CycleDirection.PREVIOUS
+        await self._put(ExecutionUpdate(cycle_intensity=direction).to_dict())
 
     async def set_intensity(self, intensity: Intensity) -> None:
         """Set intensity (if syncing)."""
-        await self._put({"intensity": intensity})
+        await self._put(ExecutionUpdate(intensity=intensity).to_dict())
 
     async def set_state(
         self,
@@ -59,26 +62,22 @@ class Execution(Resource[ExecutionData]):
         hue_target: Optional[str] = None,
     ) -> None:
         """Change execution state of huesyncbox."""
-        data = {
-            key: value
-            for key, value in {
-                "syncActive": sync_active,
-                "toggleSyncActive": True if sync_toggle is True else None,
-                "hdmiActive": hdmi_active,
-                "toggleHdmiActive": True if hdmi_active_toggle is True else None,
-                "mode": mode,
-                "cycleSyncMode": mode_cycle,
-                "hdmiSource": hdmi_source,
-                "cycleHdmiSource": hdmi_source_cycle,
-                "brightness": brightness,
-                "incrementBrightness": brightness_step,
-                "intensity": intensity,
-                "cycleIntensity": intensity_cycle,
-                "video": video.to_dict() if video else None,
-                "game": game.to_dict() if game else None,
-                "music": music.to_dict() if music else None,
-                "hueTarget": hue_target,
-            }.items()
-            if value is not None
-        }
-        await self._put(data)
+        update = ExecutionUpdate(
+            sync_active=sync_active,
+            toggle_sync_active=True if sync_toggle else None,
+            hdmi_active=hdmi_active,
+            toggle_hdmi_active=True if hdmi_active_toggle else None,
+            mode=mode,
+            cycle_sync_mode=mode_cycle,
+            hdmi_source=hdmi_source,
+            cycle_hdmi_source=hdmi_source_cycle,
+            brightness=brightness,
+            increment_brightness=brightness_step,
+            intensity=intensity,
+            cycle_intensity=intensity_cycle,
+            video=video,
+            game=game,
+            music=music,
+            hue_target=hue_target,
+        )
+        await self._put(update.to_dict())

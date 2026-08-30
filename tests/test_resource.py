@@ -2,8 +2,9 @@ from typing import Any, Optional
 
 import pytest
 
+from aiohuesyncbox.controllers.behavior import Behavior
 from aiohuesyncbox.controllers.device import Device
-from aiohuesyncbox.models import DeviceData, LedMode, Registration
+from aiohuesyncbox.models import BehaviorData, DeviceData, LedMode, Registration
 from aiohuesyncbox.controllers.registrations import Registrations
 
 
@@ -65,6 +66,30 @@ async def test_resource_update_replaces_underlying_data():
 
     assert request.calls == [("get", "/device", None)]
     assert device.led_mode is LedMode.DIMMED
+
+
+@pytest.mark.asyncio
+async def test_force_dovi_native_uses_boolean_controller_api():
+    request = FakeRequest()
+    behavior = Behavior(
+        BehaviorData.from_dict(
+            {
+                "inactivePowersave": 20,
+                "cecPowersave": 1,
+                "usbPowersave": 1,
+                "hpdInputSwitch": 1,
+            }
+        ),
+        request,
+    )
+
+    await behavior.set_force_dovi_native(True)
+    await behavior.set_force_dovi_native(False)
+
+    assert request.calls == [
+        ("put", "/behavior", {"forceDoviNative": 1}),
+        ("put", "/behavior", {"forceDoviNative": 0}),
+    ]
 
 
 

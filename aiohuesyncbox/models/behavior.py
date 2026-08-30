@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from .base import BaseModel
+from .base import BaseModel, UpdateModel
 from .enums import Enabled, HdrMode
 
 
@@ -9,30 +9,45 @@ from .enums import Enabled, HdrMode
 class InputBehavior(BaseModel):
     """Per-HDMI-input behavior settings."""
 
-    #: Automatically switch input when this source sends CEC active. Disabled 0, Enabled 1.
     cec_input_switch: Enabled
-    #: Automatically set syncActive true when this source and output are linked. Disabled 0, Enabled 1.
+    """Switch input when this source sends a CEC active signal."""
     link_auto_sync: Enabled
-    #: HDR PQ compensation during Light Sync. 0 = Auto; 1 = Force SDR; 2 = Force HDR. Sync Box 4K only.
+    """Start syncing when this input and the output are linked."""
     hdr_mode: Optional[HdrMode] = None
-    #: Automatically switch input when individual source is plugged in (or powered on). Disabled 0, Enabled 1.
+    """HDR PQ compensation mode; supported by 4K Sync Boxes only."""
     hpd_input_port_switch: Optional[Enabled] = None
+    """Switch input when this source is connected or powered on."""
+
+
+@dataclass
+class BehaviorUpdate(UpdateModel):
+    """Partial configuration change accepted by the `/behavior` endpoint."""
+
+    inactive_powersave: Optional[int] = None
+    cec_powersave: Optional[Enabled] = None
+    usb_powersave: Optional[Enabled] = None
+    hpd_input_switch: Optional[Enabled] = None
+    force_dovi_native: Optional[Enabled] = None
+    input1: Optional[InputBehavior] = None
+    input2: Optional[InputBehavior] = None
+    input3: Optional[InputBehavior] = None
+    input4: Optional[InputBehavior] = None
 
 
 @dataclass
 class BehaviorData(BaseModel):
-    """Represent Behavior config of huesyncbox."""
+    """Configuration returned by the `/behavior` endpoint."""
 
-    #: Minutes of no link before automatically going to powersave. 0 is disabled.
     inactive_powersave: int
-    #: Go to powersave when TV sends CEC OFF. Disabled 0, Enabled 1.
+    """Passthrough idle minutes before powersave; 0 disables the timeout."""
     cec_powersave: Enabled
-    #: Go to powersave when USB power transitions from 5V to 0V. Disabled 0, Enabled 1.
+    """Enter powersave when the TV sends a CEC off signal."""
     usb_powersave: Enabled
-    #: Automatically switch input when any source is plugged in (or powered on). Disabled 0, Enabled 1.
+    """Enter powersave when USB power transitions from 5 V to 0 V."""
     hpd_input_switch: Enabled
-    #: Force native mode when the TV advertises Dolby Vision. Sync Box 4K only.
+    """Switch to an input when any source is connected or powered on."""
     force_dovi_native: Optional[Enabled] = None
+    """Force native Dolby Vision mode when advertised by the TV; 4K only."""
     input1: Optional[InputBehavior] = None
     input2: Optional[InputBehavior] = None
     input3: Optional[InputBehavior] = None

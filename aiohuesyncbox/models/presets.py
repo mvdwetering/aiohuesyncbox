@@ -1,18 +1,34 @@
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
-from .base import BaseModel
+from .base import BaseModel, UpdateModel
 
 
 @dataclass
 class Preset(BaseModel):
-    """Represent a single preset."""
+    """Stored execution preset."""
 
     name: str
-    #: UTC time when this preset was last used.
+    """User-assigned preset name, limited to 24 bytes by the Sync Box."""
     last_used: Optional[str] = None
-    #: Object to write to execution when preset is activated. May not contain the "preset" key itself.
+    """UTC ISO 8601 timestamp at which the preset was last activated."""
     execution: Dict[str, Any] = field(default_factory=dict)
-
-    #: Not part of the JSON body, it is the dict key under the presets map.
+    """Execution change applied on activation; may not reference another preset."""
     id: str = field(default="", compare=False, metadata={"serialize": "omit"})
+    """Preset id derived from the containing presets map key."""
+
+
+@dataclass
+class PresetCreate(BaseModel):
+    """Payload accepted by `POST /presets`."""
+
+    name: str
+    execution: Dict[str, Any]
+
+
+@dataclass
+class PresetUpdate(UpdateModel):
+    """Partial change accepted by an individual preset endpoint."""
+
+    name: str | None = None
+    execution: Dict[str, Any] | None = None

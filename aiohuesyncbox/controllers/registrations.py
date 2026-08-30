@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from ..models import Registration, RequestFunc
+from ..models import Registration, RegistrationCreate, RequestFunc
 from .base import CollectionResource
 
 
@@ -22,7 +22,9 @@ class Registrations(CollectionResource[Registration]):
         response = await self._request(
             "post",
             self._path,
-            {"appName": application_name, "instanceName": instance_name},
+            RegistrationCreate(
+                app_name=application_name, instance_name=instance_name
+            ).to_dict(),
             auth=False,
         )
         if not response:

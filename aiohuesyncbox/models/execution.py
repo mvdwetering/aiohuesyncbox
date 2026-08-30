@@ -1,15 +1,14 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from .base import BaseModel
-from .enums import ExecutionMode, HdmiSource, Intensity, MusicPalette, SyncMode
+from .base import BaseModel, UpdateModel
+from .enums import CycleDirection, ExecutionMode, HdmiSource, Intensity, MusicPalette, SyncMode
 
 
 @dataclass
 class VideoMode(BaseModel):
     """Video (or game) mode execution state."""
 
-    #: subtle, moderate, high, intense
     intensity: Intensity
     background_lighting: bool
 
@@ -23,34 +22,51 @@ class GameMode(VideoMode):
 class MusicMode(BaseModel):
     """Music mode execution state."""
 
-    #: subtle, moderate, high, intense
     intensity: Intensity
-    #: happyEnergetic, happyCalm, melancholicCalm, melancholicEnergetic, neutral
     palette: MusicPalette
 
 
 @dataclass
-class ExecutionData(BaseModel):
-    """Represent Execution config."""
+class ExecutionUpdate(UpdateModel):
+    """Partial state change accepted by the `/execution` endpoint."""
 
-    #: Reports false in case of powersave or passthrough mode,
-    #: and true in case of video, game, or music mode.
+    sync_active: Optional[bool] = None
+    toggle_sync_active: Optional[bool] = None
+    hdmi_active: Optional[bool] = None
+    toggle_hdmi_active: Optional[bool] = None
+    mode: Optional[ExecutionMode] = None
+    cycle_sync_mode: Optional[CycleDirection] = None
+    hdmi_source: Optional[HdmiSource] = None
+    cycle_hdmi_source: Optional[CycleDirection] = None
+    brightness: Optional[int] = None
+    increment_brightness: Optional[int] = None
+    intensity: Optional[Intensity] = None
+    cycle_intensity: Optional[CycleDirection] = None
+    video: Optional[VideoMode] = None
+    game: Optional[GameMode] = None
+    music: Optional[MusicMode] = None
+    hue_target: Optional[str] = None
+
+
+@dataclass
+class ExecutionData(BaseModel):
+    """State returned by the `/execution` endpoint."""
+
     sync_active: bool
-    #: Reports false in case of powersave mode,
-    #: and true in case of passthrough, video, game or music mode.
+    """False in powersave/passthrough; true while syncing in a sync mode."""
     hdmi_active: bool
-    #: powersave, passthrough, video, game, music, ambient
-    #: (More modes can be added in the future, so clients must gracefully handle modes they don't recognize)
+    """False in powersave; true while passing through or syncing HDMI content."""
     mode: ExecutionMode
-    #: Last sync mode used.
     last_sync_mode: SyncMode
-    #: Current selected HDMI source input1, input2, input3, input4.
+    """Most recently used sync mode."""
     hdmi_source: HdmiSource
-    #: Currently selected entertainment area. Corresponds to a group under /hue. E.g. "groups/13"
+    """Currently selected HDMI input."""
     hue_target: str
-    #: 0 - 200 (100 = no brightness reduction/boost compared to input, 0 = max reduction, 200 = max boost)
+    """Entertainment-area identifier, either `groups/<id>` or an entertainmentconfiguration UUID."""
     brightness: int
+    """0 - 200 (100 = no brightness reduction/boost compared to input, 0 = max reduction, 200 = max boost)."""
     video: VideoMode
     game: GameMode
     music: MusicMode
     preset: Optional[str] = None
+    """Identifier of the preset currently being executed, when one is active."""

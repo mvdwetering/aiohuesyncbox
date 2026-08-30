@@ -163,6 +163,28 @@ async def test_collection_resource_loads_items_keyed_by_id():
 
 
 @pytest.mark.asyncio
+async def test_collection_resource_update_clears_items_for_empty_response():
+    request = FakeRequest()
+    registrations = Registrations(request)
+    registrations.load(
+        {
+            "0": {
+                "appName": "Hue Sync Android",
+                "instanceName": "Pixel",
+                "role": "admin",
+                "lastUsed": "2020-02-16T05:45:20Z",
+                "created": "2020-01-11T05:45:20Z",
+            }
+        }
+    )
+    request.response = {}
+
+    await registrations.update()
+
+    assert len(registrations) == 0
+
+
+@pytest.mark.asyncio
 async def test_collection_resource_delete_calls_correct_path():
     request = FakeRequest()
     registrations = Registrations(request)

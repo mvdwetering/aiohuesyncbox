@@ -72,7 +72,7 @@ class CollectionResource(Generic[TItem]):
     async def update(self) -> None:
         """Refresh from the device."""
         response = await self._request("get", self._path)
-        if response:
+        if response is not None:
             self.load(response)
 
     def load(self, response: Dict[str, Any]) -> None:

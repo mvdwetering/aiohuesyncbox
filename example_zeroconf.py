@@ -2,17 +2,19 @@
 
 from zeroconf import ServiceBrowser, ServiceListener, Zeroconf
 
-
 class MyListener(ServiceListener):
     def update_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         pass
 
     def remove_service(self, zc: Zeroconf, type_: str, name: str) -> None:
-        print("Service %s removed" % (name,))
+        print(f"\nService {name} removed")
 
     def add_service(self, zc: Zeroconf, type_: str, name: str) -> None:
-        info = zc.get_service_info(type_, name)
-        print("Service %s added, service info: %s" % (name, info))
+        print(f"\nService {name} added")
+
+        if info := zc.get_service_info(type_, name):
+            print(f" - IP addresses: {info.parsed_addresses()}")
+            print(f" - Raw service info: {info}")
 
 
 zeroconf = Zeroconf()

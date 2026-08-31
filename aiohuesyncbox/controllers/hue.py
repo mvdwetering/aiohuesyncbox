@@ -10,7 +10,7 @@ class Hue(Resource[HueData]):
 
     if TYPE_CHECKING:
         # __getattr__ delegates these to self._data at runtime; declared here
-        # only so type checkers see real types instead of Any.
+        # so type checkers see real types instead of Any.
         bridge_unique_id: str
         bridge_ip_address: str
         connection_state: ConnectionState

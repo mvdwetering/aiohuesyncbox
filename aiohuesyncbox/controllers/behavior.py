@@ -1,10 +1,25 @@
-from ..models import BehaviorData, BehaviorUpdate, RequestFunc
+from typing import TYPE_CHECKING
+
+from ..models import BehaviorData, BehaviorUpdate, InputBehavior, RequestFunc
 from ..models.enums import Enabled
 from .base import Resource
 
 
 class Behavior(Resource[BehaviorData]):
     """Control the Behavior resource of the huesyncbox."""
+
+    if TYPE_CHECKING:
+        # __getattr__ delegates these to self._data at runtime; declared here
+        # so type checkers see real types instead of Any.
+        inactive_powersave: int
+        cec_powersave: Enabled
+        usb_powersave: Enabled | None
+        hpd_input_switch: Enabled | None
+        force_dovi_native: Enabled | None
+        input1: InputBehavior | None
+        input2: InputBehavior | None
+        input3: InputBehavior | None
+        input4: InputBehavior | None
 
     def __init__(self, data: BehaviorData, request: RequestFunc) -> None:
         super().__init__("/behavior", data, request)

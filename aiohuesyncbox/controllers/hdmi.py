@@ -9,7 +9,7 @@ class Hdmi(Resource[HdmiData]):
 
     if TYPE_CHECKING:
         # __getattr__ delegates these to self._data at runtime; declared here
-        # only so type checkers see real types instead of Any.
+        # so type checkers see real types instead of Any.
         content_specs: str
         video_sync_supported: bool
         audio_sync_supported: bool

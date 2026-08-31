@@ -35,7 +35,8 @@ async def main(args):
                 pass
 
         # Save registration_info somewhere and use the 'access_token' when instantiating HueSyncBox next time
-        print(registration_info)
+        print(f"Registration ID: {registration_info.registration_id}")
+        print(f"Access Token: {registration_info.access_token}")
 
     # This part is the "Basic usage" example in the readme
     await box.initialize()
@@ -51,7 +52,7 @@ async def main(args):
         hdmi_source=HdmiSource.INPUT3,
     )
 
-    # Call update() to update with latest status of the box
+    # Call refresh() to get the latest status of the box
     await box.execution.refresh()
     print(box.execution.sync_active)
     print(box.execution.mode)

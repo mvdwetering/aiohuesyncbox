@@ -49,6 +49,6 @@ class HdmiData(BaseModel):
     """Whether current content can be synchronized in music mode."""
     output: Output
     input1: Input
-    input2: Input
-    input3: Input
-    input4: Input
+    input2: Input | None = None
+    input3: Input | None = None
+    input4: Input | None = None

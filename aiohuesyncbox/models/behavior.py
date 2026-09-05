@@ -41,9 +41,9 @@ class BehaviorData(BaseModel):
     """Passthrough idle minutes before powersave; 0 disables the timeout."""
     cec_powersave: Enabled
     """Enter powersave when the TV sends a CEC off signal."""
-    usb_powersave: Enabled
+    usb_powersave: Enabled | None = None
     """Enter powersave when USB power transitions from 5 V to 0 V."""
-    hpd_input_switch: Enabled
+    hpd_input_switch: Enabled | None = None
     """Switch to an input when any source is connected or powered on."""
     force_dovi_native: Enabled | None = None
     """Force native Dolby Vision mode when advertised by the TV; 4K only."""

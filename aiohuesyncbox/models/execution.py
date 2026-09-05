@@ -53,13 +53,9 @@ class ExecutionData(BaseModel):
 
     sync_active: bool
     """False in powersave/passthrough; true while syncing in a sync mode."""
-    hdmi_active: bool
-    """False in powersave; true while passing through or syncing HDMI content."""
     mode: ExecutionMode
     last_sync_mode: SyncMode
     """Most recently used sync mode."""
-    hdmi_source: HdmiSource
-    """Currently selected HDMI input."""
     hue_target: str
     """Entertainment-area identifier, either `groups/<id>` or an entertainmentconfiguration UUID."""
     brightness: int
@@ -67,5 +63,9 @@ class ExecutionData(BaseModel):
     video: VideoMode
     game: GameMode
     music: MusicMode
+    hdmi_active: bool | None = None
+    """False in powersave; true while passing through or syncing HDMI content."""
+    hdmi_source: HdmiSource | None = None
+    """Currently selected HDMI input."""
     preset: str | None = None
     """Identifier of the preset currently being executed, when one is active."""

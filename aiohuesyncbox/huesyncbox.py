@@ -6,7 +6,16 @@ from typing import Self
 
 import aiohttp
 
-from .controllers import Behavior, Device, Execution, Hdmi, Hue, Ir, Presets, Registrations
+from .controllers import (
+    Behavior,
+    Device,
+    Execution,
+    Hdmi,
+    Hue,
+    Ir,
+    Presets,
+    Registrations,
+)
 from .models import (
     BehaviorData,
     DeviceData,
@@ -44,12 +53,12 @@ class HueSyncBox:
         self._clientsession: aiohttp.ClientSession | None = None
 
         # API endpoints
-        self.behavior: Behavior
+        self.behavior: Behavior | None
         self.device: Device
         self.execution: Execution
-        self.hdmi: Hdmi
+        self.hdmi: Hdmi | None
         self.hue: Hue
-        self.ir: Ir
+        self.ir: Ir | None
         self.registrations = Registrations(self.request)
         self.presets = Presets(self.request)
 
@@ -146,16 +155,26 @@ class HueSyncBox:
         self._last_response = response
 
         if response:
-            self.behavior = Behavior(
-                BehaviorData.from_dict(response["behavior"]), self.request
+            self.behavior = (
+                Behavior(BehaviorData.from_dict(response["behavior"]), self.request)
+                if "behavior" in response
+                else None
             )
             self.device = Device(DeviceData.from_dict(response["device"]), self.request)
             self.execution = Execution(
                 ExecutionData.from_dict(response["execution"]), self.request
             )
             self.hue = Hue(HueData.from_dict(response["hue"]), self.request)
-            self.hdmi = Hdmi(HdmiData.from_dict(response["hdmi"]), self.request)
-            self.ir = Ir(IrData.from_dict(response["ir"]), self.request)
+            self.hdmi = (
+                Hdmi(HdmiData.from_dict(response["hdmi"]), self.request)
+                if "hdmi" in response
+                else None
+            )
+            self.ir = (
+                Ir(IrData.from_dict(response["ir"]), self.request)
+                if "ir" in response
+                else None
+            )
             self.registrations.load(response["registrations"])
             self.presets.load(response["presets"])
 

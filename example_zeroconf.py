@@ -2,6 +2,7 @@
 
 from zeroconf import ServiceBrowser, ServiceListener, Zeroconf
 
+
 class MyListener(ServiceListener):
     def update_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         pass

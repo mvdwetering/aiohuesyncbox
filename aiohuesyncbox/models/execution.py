@@ -1,7 +1,14 @@
 from dataclasses import dataclass
 
 from .base import BaseModel, UpdateModel
-from .enums import CycleDirection, ExecutionMode, HdmiSource, Intensity, MusicPalette, SyncMode
+from .enums import (
+    CycleDirection,
+    ExecutionMode,
+    HdmiSource,
+    Intensity,
+    MusicPalette,
+    SyncMode,
+)
 
 
 @dataclass

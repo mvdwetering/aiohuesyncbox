@@ -35,7 +35,6 @@ def _device_data(led_mode: int = 1) -> DeviceData:
     return DeviceData.from_dict(_device_raw(led_mode))
 
 
-
 class FakeRequest:
     """Records calls and returns canned responses, standing in for HueSyncBox.request."""
 
@@ -154,7 +153,6 @@ async def test_force_dovi_native_uses_boolean_controller_api():
         ("put", "/behavior", {"forceDoviNative": 1}),
         ("put", "/behavior", {"forceDoviNative": 0}),
     ]
-
 
 
 async def test_collection_resource_loads_items_keyed_by_id():

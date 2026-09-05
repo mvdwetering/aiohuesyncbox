@@ -1,7 +1,20 @@
 from typing import TYPE_CHECKING
 
-from ..models import ExecutionData, ExecutionUpdate, GameMode, MusicMode, RequestFunc, VideoMode
-from ..models.enums import CycleDirection, ExecutionMode, HdmiSource, Intensity, SyncMode
+from ..models import (
+    ExecutionData,
+    ExecutionUpdate,
+    GameMode,
+    MusicMode,
+    RequestFunc,
+    VideoMode,
+)
+from ..models.enums import (
+    CycleDirection,
+    ExecutionMode,
+    HdmiSource,
+    Intensity,
+    SyncMode,
+)
 from .base import Resource
 
 

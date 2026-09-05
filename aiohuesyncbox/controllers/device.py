@@ -1,6 +1,13 @@
 from typing import TYPE_CHECKING
 
-from ..models import DeviceAutoUpdate, DeviceCapabilities, DeviceData, DeviceUpdate, RequestFunc, Wifi
+from ..models import (
+    DeviceAutoUpdate,
+    DeviceCapabilities,
+    DeviceData,
+    DeviceUpdate,
+    RequestFunc,
+    Wifi,
+)
 from ..models.enums import DeviceAction, LedMode, WifiState
 from .base import Resource
 

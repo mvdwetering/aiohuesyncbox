@@ -19,11 +19,11 @@ class Ir(Resource[IrData]):
 
     async def set_scanning(self, scanning: bool) -> None:
         """Enable/disable IR code scanning mode."""
-        await self._request("put", "/ir/scan", data=ScanUpdate(scanning=scanning).to_dict())
+        await self._request(
+            "put", "/ir/scan", data=ScanUpdate(scanning=scanning).to_dict()
+        )
 
-    async def set_code(
-        self, code: str, name: str, execution: dict[str, Any]
-    ) -> None:
+    async def set_code(self, code: str, name: str, execution: dict[str, Any]) -> None:
         """Create or update an IR code mapping."""
         await self._request(
             "put",

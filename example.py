@@ -67,7 +67,6 @@ async def main(args):
 
 
 if __name__ == "__main__":
-
     ## Commandlineoptions
     parser = argparse.ArgumentParser(
         description="Example application for aiohuesyncbox."

@@ -68,7 +68,7 @@ async def test_resource_refresh_replaces_underlying_data():
     device = Device(_device_data(led_mode=1), request)
     request.response = _device_raw(led_mode=2)
 
-    await device.refresh()
+    await device.refresh_data()
 
     assert request.calls == [("get", "/device", None)]
     assert device.led_mode is LedMode.DIMMED
@@ -194,7 +194,7 @@ async def test_collection_resource_refresh_clears_items_for_empty_response():
     )
     request.response = {}
 
-    await registrations.refresh()
+    await registrations.refresh_data()
 
     assert len(registrations) == 0
 

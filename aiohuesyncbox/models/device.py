@@ -45,18 +45,20 @@ class DeviceData(BaseModel):
     """State returned by the `/device` endpoint."""
 
     name: str
+    """Friendly name of the device."""
     device_type: str
-    """Device model identifier; new Sync Box models may introduce new values."""
+    """Device model identifier, e.g. HSB1."""
     unique_id: str
     """
-    Uppercase 12-character device identifier used on the label,
-    certificate common name, and hostname.
+    Capitalized hex string of the 6 byte/12 characters device id without delimiters. 
+    Used as unique id on label, certificate common name, hostname etc.
     """
     ip_address: str
+    """Local IP address of the device"""
     api_level: int
-    """API compatibility level reported by the installed firmware."""
+    """Increased between firmware versions when api changes."""
     firmware_version: str
-    """User-readable firmware version."""
+    """User readable version of the device firmware, starting with decimal major .minor .maintenance format e.g. “1.12.3”"""
     build_number: int
     """Monotonically increasing firmware build number."""
     led_mode: LedMode

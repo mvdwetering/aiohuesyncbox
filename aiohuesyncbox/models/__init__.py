@@ -48,7 +48,6 @@ from .presets import PresetUpdate as PresetUpdate
 from .enums import ConnectionState as ConnectionState
 from .enums import CycleDirection as CycleDirection
 from .enums import DeviceAction as DeviceAction
-from .enums import Enabled as Enabled
 from .enums import ExecutionMode as ExecutionMode
 from .enums import HdmiSource as HdmiSource
 from .enums import HdrMode as HdrMode

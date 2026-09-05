@@ -32,7 +32,6 @@ from .models import Preset as Preset
 from .models import ConnectionState as ConnectionState
 from .models import CycleDirection as CycleDirection
 from .models import DeviceAction as DeviceAction
-from .models import Enabled as Enabled
 from .models import ExecutionMode as ExecutionMode
 from .models import HdmiSource as HdmiSource
 from .models import HdrMode as HdrMode
@@ -55,7 +54,6 @@ __all__ = [
     "DeviceAction",
     "DeviceCapabilities",
     "DeviceUpdate",
-    "Enabled",
     "Execution",
     "ExecutionMode",
     "GameMode",

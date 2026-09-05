@@ -129,11 +129,6 @@ class PortStatus(StrEnum):
     UNKNOWN = "unknown"
 
 
-class Enabled(IntEnum):
-    DISABLED = 0
-    ENABLED = 1
-
-
 class HdrMode(IntEnum):
     AUTO = 0
     FORCE_SDR = 1

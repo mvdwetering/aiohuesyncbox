@@ -9,7 +9,6 @@ from aiohuesyncbox.models import (
     ExecutionMode,
     HdmiSource,
     HdmiData,
-    Enabled,
     HueData,
     Intensity,
     LedMode,
@@ -218,8 +217,8 @@ def test_hdmi_and_behavior_parse_protocol_enums():
 
     assert hdmi.input1.type is PortType.XBOX
     assert hdmi.output.status is PortStatus.LINKED
-    assert behavior.cec_powersave is Enabled.ENABLED
-    assert behavior.hpd_input_switch is Enabled.DISABLED
+    assert behavior.cec_powersave is True
+    assert behavior.hpd_input_switch is False
 
 
 def test_registration_role_parses_as_enum():

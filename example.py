@@ -35,15 +35,17 @@ async def main(args):
                 pass
 
         # Save registration_info somewhere and use the 'access_token' when instantiating HueSyncBox next time
-        print(f"Registration ID: {registration_info.registration_id}")
-        print(f"Access Token: {registration_info.access_token}")
+        print("Registration successful!")
+        print(f"  ID: {registration_info.registration_id}")
+        print(f"  Access Token: {registration_info.access_token}")
 
     # This part is the "Basic usage" example in the readme
     await box.initialize()
-    print(box.device.name)
-    print(box.execution.sync_active)
-    print(box.execution.mode)
-    print(box.execution.hdmi_source)
+    print("Current box status:")
+    print(f"  Name: {box.device.name}")
+    print(f"  Sync Active: {box.execution.sync_active}")
+    print(f"  Mode: {box.execution.mode}")
+    print(f"  HDMI Source: {box.execution.hdmi_source}")
 
     # Turn the box on, start video mode syncing on input 1
     await box.execution.set_state(
@@ -52,11 +54,12 @@ async def main(args):
         hdmi_source=HdmiSource.INPUT1 if box.hdmi else None,
     )
 
-    # Call refresh() to get the latest status of the box
-    await box.execution.refresh()
-    print(box.execution.sync_active)
-    print(box.execution.mode)
-    print(box.execution.hdmi_source)
+    # Call refresh_data() to get the latest status of the box
+    await box.refresh_data()
+    print("Updated box status:")
+    print(f"  Sync Active: {box.execution.sync_active}")
+    print(f"  Mode: {box.execution.mode}")
+    print(f"  HDMI Source: {box.execution.hdmi_source}")
 
     # Cleanup in case the registration was done this run
     if registration_info and not args.skipunregister:

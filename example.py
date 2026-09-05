@@ -45,11 +45,11 @@ async def main(args):
     print(box.execution.mode)
     print(box.execution.hdmi_source)
 
-    # Turn the box on (assuming it was off), start syncing on input 3
+    # Turn the box on, start video mode syncing on input 1
     await box.execution.set_state(
         sync_active=True,
         mode=ExecutionMode.VIDEO,
-        hdmi_source=HdmiSource.INPUT3,
+        hdmi_source=HdmiSource.INPUT1 if box.hdmi else None,
     )
 
     # Call refresh() to get the latest status of the box

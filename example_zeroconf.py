@@ -14,7 +14,11 @@ class MyListener(ServiceListener):
         print(f"\nService {name} added")
 
         if info := zc.get_service_info(type_, name):
-            print(f" - IP addresses: {info.parsed_addresses()}")
+            model = (info.properties.get(b'devicetype') or b'').decode()
+            name = (info.properties.get(b'name') or b'').decode()
+            print(
+                f" - {name}, {model}, {' '.join(info.parsed_addresses())}"
+            )
             print(f" - Raw service info: {info}")
 
 

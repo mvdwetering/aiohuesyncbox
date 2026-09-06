@@ -13,7 +13,7 @@ python3 -m pip install aiohuesyncbox
 
 Instantiate the HueSyncBox class and access the API.
 
-For more details on the API see the official API documentation on https://developers.meethue.com (requires free registration)
+For more details on the API see the official API documentation on <https://developers.meethue.com> (requires free registration)
 
 ### Note on changing bridge
 

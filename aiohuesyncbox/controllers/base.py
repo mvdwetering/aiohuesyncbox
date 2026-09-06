@@ -11,19 +11,15 @@ TItem = TypeVar("TItem", bound=BaseModel)
 class Resource(Generic[T]):
     """Controller for a singleton API resource (e.g. /device, /execution).
 
-    Binds a data model instance to its API path and the request function.
-    Field access (e.g. `device.name`) is delegated to the wrapped data model,
-    keeping serialization concerns (in the data model) separate from
-    networking/mutation concerns (here).
+    Subclasses expose the wrapped data model's fields as real `@property`
+    methods, keeping serialization concerns (in the data model) separate
+    from networking/mutation concerns (here).
     """
 
     def __init__(self, path: str, data: T, request: RequestFunc) -> None:
         self._path = path
         self._data = data
         self._request = request
-
-    def __getattr__(self, name: str) -> Any:
-        return getattr(self._data, name)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Resource):

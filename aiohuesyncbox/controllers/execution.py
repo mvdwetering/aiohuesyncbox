@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from ..models import (
     ExecutionData,
     ExecutionUpdate,
@@ -21,23 +19,52 @@ from .base import Resource
 class Execution(Resource[ExecutionData]):
     """Control the Execution resource of the huesyncbox."""
 
-    if TYPE_CHECKING:
-        # __getattr__ delegates these to self._data at runtime; declared here
-        # so type checkers see real types instead of Any.
-        sync_active: bool
-        hdmi_active: bool
-        mode: ExecutionMode
-        last_sync_mode: SyncMode
-        hdmi_source: HdmiSource
-        hue_target: str
-        brightness: int
-        video: VideoMode
-        game: GameMode
-        music: MusicMode
-        preset: str | None
-
     def __init__(self, data: ExecutionData, request: RequestFunc) -> None:
         super().__init__("/execution", data, request)
+
+    @property
+    def sync_active(self) -> bool:
+        return self._data.sync_active
+
+    @property
+    def hdmi_active(self) -> bool | None:
+        return self._data.hdmi_active
+
+    @property
+    def mode(self) -> ExecutionMode:
+        return self._data.mode
+
+    @property
+    def last_sync_mode(self) -> SyncMode:
+        return self._data.last_sync_mode
+
+    @property
+    def hdmi_source(self) -> HdmiSource | None:
+        return self._data.hdmi_source
+
+    @property
+    def hue_target(self) -> str:
+        return self._data.hue_target
+
+    @property
+    def brightness(self) -> int:
+        return self._data.brightness
+
+    @property
+    def video(self) -> VideoMode:
+        return self._data.video
+
+    @property
+    def game(self) -> GameMode:
+        return self._data.game
+
+    @property
+    def music(self) -> MusicMode:
+        return self._data.music
+
+    @property
+    def preset(self) -> str | None:
+        return self._data.preset
 
     async def toggle_sync_active(self) -> None:
         """Toggle sync_active."""

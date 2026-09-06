@@ -32,9 +32,8 @@ MIN_API_LEVEL = 7
 
 logger = logging.getLogger(__name__)
 
-
-class HueSyncBox:
-    """Control a Philips Hue Play HDMI Sync Box."""
+class HueSyncDevice:
+    """Control a Philips Hue Play Sync device."""
 
     def __init__(
         self,
@@ -228,6 +227,8 @@ class HueSyncBox:
             logger.debug(err, exc_info=True)
             raise RequestError(f"Timeout requesting data from {self._host}") from err
 
+class HueSyncBox(HueSyncDevice):
+    """Control a Philips Hue Play HDMI Sync Box."""
 
 def _raise_on_error(data: dict) -> None:
     """Check response for error message."""

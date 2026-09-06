@@ -36,7 +36,7 @@ def _device_data(led_mode: int = 1) -> DeviceData:
 
 
 class FakeRequest:
-    """Records calls and returns canned responses, standing in for HueSyncBox.request."""
+    """Records calls and returns canned responses, standing in for HueSyncDevice.request."""
 
     def __init__(self) -> None:
         self.calls: list[tuple] = []

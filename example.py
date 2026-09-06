@@ -4,14 +4,14 @@ import argparse
 import logging
 import asyncio
 
-from aiohuesyncbox import ExecutionMode, HdmiSource, HueSyncBox, InvalidState
+from aiohuesyncbox import ExecutionMode, HdmiSource, HueSyncDevice, InvalidState
 
 
 async def main(args):
     registration_info = None
 
     if args.token:
-        box = HueSyncBox(args.host, args.id, access_token=args.token)
+        box = HueSyncDevice(args.host, args.id, access_token=args.token)
         if not await box.is_registered():
             await box.close()
             print("Token is not valid")
@@ -19,7 +19,7 @@ async def main(args):
     else:
         print("No token provided, starting registration process with huesyncbox.")
         # This is basically the "Registration" example from the readme except for the unregister step which is at the end
-        box = HueSyncBox(args.host, args.id)
+        box = HueSyncDevice(args.host, args.id)
         print(
             "Press the button on the box for a few seconds until the light blinks green."
         )
@@ -34,7 +34,7 @@ async def main(args):
                 # Indicates the button was not pressed
                 pass
 
-        # Save registration_info somewhere and use the 'access_token' when instantiating HueSyncBox next time
+        # Save registration_info somewhere and use the 'access_token' when instantiating HueSyncDevice next time
         print("Registration successful!")
         print(f"  ID: {registration_info.registration_id}")
         print(f"  Access Token: {registration_info.access_token}")
@@ -63,7 +63,7 @@ async def main(args):
 
     # Cleanup in case the registration was done this run
     if registration_info and not args.skipunregister:
-        # Unregister by registration ID. HueSyncBox needs to have a valid accessToken to execute this request
+        # Unregister by registration ID. HueSyncDevice needs to have a valid accessToken to execute this request
         await box.unregister(registration_info.registration_id)
 
     await box.close()

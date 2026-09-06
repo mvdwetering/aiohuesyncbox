@@ -19,7 +19,7 @@ Key patterns:
 - `Resource` subclasses use `@property` methods (one per model field) for delegation and type safety — this allows `box.device.name` attribute access while maintaining type hints and IDE support.
 - `TYPE_CHECKING` blocks are NOT used; all fields must be real `@property` definitions.
 - Field/attribute names must match the API spec 1:1 for discoverability. If a model field name collides with a method name, rename the method (not the field).
-- `HueSyncBox.refresh_data()` fetches fresh data from the device; individual resource `refresh_data()` methods update that resource.
+- `HueSyncDevice.refresh_data()` fetches fresh data from the device; individual resource `refresh_data()` methods update that resource.
 
 ## Build and Test
 

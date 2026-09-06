@@ -1,7 +1,8 @@
 # AIOHUESYNCBOX
 
-Asyncio package to communicate with Philips Hue Play HDMI Sync Box.
-This package is aimed at basic control of the box. Initial setup and configuration is assumed to have been done with the official Hue app.
+Asyncio package to communicate with Philips Hue Play Sync devices (box and screen sync).
+
+This package is aimed at basic control of the devices. Initial setup and configuration is assumed to have been done with the official Hue app.
 
 ## Installation
 
@@ -11,7 +12,7 @@ python3 -m pip install aiohuesyncbox
 
 ## Usage
 
-Instantiate the HueSyncBox class and access the API.
+Instantiate the HueSyncDevice class and access the API.
 
 For more details on the API see the official API documentation on <https://developers.meethue.com> (requires free registration)
 
@@ -37,12 +38,12 @@ There is also an example on using `zeroconf` for device discovery.
 ### Registration
 
 ```python
-from aiohuesyncbox import HueSyncBox, InvalidState
+from aiohuesyncbox import HueSyncDevice, InvalidState
 
 # host and id can be obtained through mDNS/zeroconf discovery
 # (or for testing look them up in the official Hue app)
 # The ID is the number that looks like C43212345678
-box = HueSyncBox(host, id)
+box = HueSyncDevice(host, id)
 
 print("Press the button on the box for a few seconds until the light blinks green.")
 
@@ -55,23 +56,23 @@ while not registration_info:
         pass
     await asyncio.sleep(1)
 
-# Save registration_info somewhere and use the 'access_token' when instantiating HueSyncBox next time
+# Save registration_info somewhere and use the 'access_token' when instantiating HueSyncDevice next time
 print(f"Registration ID: {registration_info.registration_id}")
 print(f"Access Token: {registration_info.access_token}")
 
 # Unregister by registration ID.
-# HueSyncBox needs to use the associated `access_token` to execute this request.
+# HueSyncDevice needs to use the associated `access_token` to execute this request.
 await box.unregister(registration_info['registration_id'])
 ```
 
 ### Basic usage
 
 ```python
-from aiohuesyncbox import HueSyncBox
+from aiohuesyncbox import HueSyncDevice
 
 # host and id can be obtained through mDNS/zeroconf discovery
 # (or for testing look them up in the official Hue app)
-box = HueSyncBox(host, id, access_token_from_registration_info)
+box = HueSyncDevice(host, id, access_token_from_registration_info)
 
 # Call initialize before interacting with the box
 await box.initialize()

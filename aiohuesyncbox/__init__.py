@@ -4,6 +4,7 @@ from .errors import Unauthorized as Unauthorized
 from .errors import InvalidState as InvalidState
 
 from .huesyncbox import HueSyncBox as HueSyncBox
+from .huesyncbox import HueSyncDevice as HueSyncDevice
 
 from .controllers import Behavior as Behavior
 from .controllers import Device as Device
@@ -63,6 +64,7 @@ __all__ = [
     "HdrMode",
     "Hue",
     "HueSyncBox",
+    "HueSyncDevice",
     "Input",
     "InputBehavior",
     "Intensity",

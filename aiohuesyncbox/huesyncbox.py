@@ -59,8 +59,8 @@ class HueSyncBox:
         self.hdmi: Hdmi | None
         self.hue: Hue
         self.ir: Ir | None
-        self.registrations = Registrations(self.request)
-        self.presets = Presets(self.request)
+        self.registrations = Registrations(self._request)
+        self.presets = Presets(self._request)
 
         self._last_response: dict | None = None  # For debugging purposes
 
@@ -109,7 +109,7 @@ class HueSyncBox:
 
     async def is_registered(self) -> bool:
         try:
-            await self.request("get", "/registrations")
+            await self._request("get", "/registrations")
             return True
         except Unauthorized:
             return False
@@ -151,34 +151,34 @@ class HueSyncBox:
             await self._clientsession.close()
 
     async def refresh_data(self) -> None:
-        response = await self.request("get", "")
+        response = await self._request("get", "")
         self._last_response = response
 
         if response:
             self.behavior = (
-                Behavior(BehaviorData.from_dict(response["behavior"]), self.request)
+                Behavior(BehaviorData.from_dict(response["behavior"]), self._request)
                 if "behavior" in response
                 else None
             )
-            self.device = Device(DeviceData.from_dict(response["device"]), self.request)
+            self.device = Device(DeviceData.from_dict(response["device"]), self._request)
             self.execution = Execution(
-                ExecutionData.from_dict(response["execution"]), self.request
+                ExecutionData.from_dict(response["execution"]), self._request
             )
-            self.hue = Hue(HueData.from_dict(response["hue"]), self.request)
+            self.hue = Hue(HueData.from_dict(response["hue"]), self._request)
             self.hdmi = (
-                Hdmi(HdmiData.from_dict(response["hdmi"]), self.request)
+                Hdmi(HdmiData.from_dict(response["hdmi"]), self._request)
                 if "hdmi" in response
                 else None
             )
             self.ir = (
-                Ir(IrData.from_dict(response["ir"]), self.request)
+                Ir(IrData.from_dict(response["ir"]), self._request)
                 if "ir" in response
                 else None
             )
             self.registrations.load(response["registrations"])
             self.presets.load(response["presets"])
 
-    async def request(
+    async def _request(
         self, method: str, path: str, data: dict | None = None, auth: bool = True
     ) -> dict | None:
         """Make a request to the API."""

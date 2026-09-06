@@ -184,7 +184,7 @@ async def test_api_level_7_compatibility():
     """Guard test to verify HueSyncBox can deserialize an API level 7 response without validation errors."""
     box = HueSyncBox("192.168.1.12", "C42996000000")
     fake_request = FakeRequest(json.loads(API_LEVEL_7_RESPONSE))
-    box.request = fake_request  # type: ignore[method-assign]
+    box._request = fake_request  # type: ignore[method-assign]
 
     await box.initialize()
 

@@ -28,7 +28,7 @@ from .models import (
 from .errors import raise_error, RequestError, Unauthorized
 from .hsb_cacert import HSB_CACERT
 
-MIN_API_LEVEL = 4
+MIN_API_LEVEL = 7
 
 logger = logging.getLogger(__name__)
 
@@ -202,7 +202,12 @@ class HueSyncBox:
                 headers["Authorization"] = f"Bearer {self._access_token}"
 
             async with self._clientsession.request(
-                method, url, json=data, headers=headers, server_hostname=self._id
+                method,
+                url,
+                json=data,
+                headers=headers,
+                server_hostname=self._id,
+                ssl=False,
             ) as resp:
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug("%s, %s", resp.status, await resp.text("utf-8"))

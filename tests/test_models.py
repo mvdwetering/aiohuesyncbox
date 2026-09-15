@@ -115,6 +115,23 @@ def test_device_from_dict():
     assert device.wifi.strength is WifiStrength.EXCELLENT
 
 
+def test_device_from_dict_tolerates_unrecognized_action():
+    """The Sync Box firmware can report transient action values (e.g. a
+    background firmware-update check) that aren't part of the fixed
+    DeviceAction set used for actions we explicitly request. DeviceAction
+    is an OpenStrEnum so these fall back to a synthesized member instead
+    of raising ValueError and failing the whole deserialization, matching
+    #184 (checkForFirmwareUpdates).
+    """
+    data = _data()["device"]
+    data["action"] = "checkForFirmwareUpdates"
+
+    device = DeviceData.from_dict(data)
+
+    assert device.action == "checkForFirmwareUpdates"
+    assert device.action is not DeviceAction.NONE
+
+
 def test_device_to_dict_round_trips_camel_case():
     device = DeviceData.from_dict(_data()["device"])
 

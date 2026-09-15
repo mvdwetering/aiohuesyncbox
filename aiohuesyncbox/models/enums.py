@@ -38,7 +38,17 @@ class LedMode(IntEnum):
     DIMMED = 2
 
 
-class DeviceAction(StrEnum):
+class DeviceAction(OpenStrEnum):
+    """Action requested of / reported by the device.
+
+    Uses OpenStrEnum because the Sync Box firmware can report transient
+    action values (e.g. "checkForFirmwareUpdates" while performing a
+    background update check) that are not part of this fixed set of
+    user-requestable actions. Falling back to a plain StrEnum would raise
+    ValueError from mashumaro deserialization and fail the whole
+    coordinator refresh for a value we don't otherwise need to act on.
+    """
+
     NONE = "none"
     SOFTWARE_RESTART = "doSoftwareRestart"
     FIRMWARE_UPDATE = "doFirmwareUpdate"

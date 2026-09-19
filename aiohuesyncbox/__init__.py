@@ -46,6 +46,7 @@ from .models import PortStatus as PortStatus
 from .models import PortType as PortType
 from .models import RegistrationRole as RegistrationRole
 from .models import SyncMode as SyncMode
+from .models import OperatingMode as OperatingMode
 from .models import WifiState as WifiState
 from .models import WifiStrength as WifiStrength
 
@@ -81,6 +82,7 @@ __all__ = [
     "MusicMode",
     "MusicPalette",
     "Output",
+    "OperatingMode",
     "PortStatus",
     "PortType",
     "Preset",

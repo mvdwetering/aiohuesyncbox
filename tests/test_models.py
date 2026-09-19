@@ -23,7 +23,6 @@ from aiohuesyncbox.models import (
     WifiState,
     WifiStrength,
 )
-
 EXAMPLE_CONFIG = """
 {
     "device": {
@@ -156,16 +155,6 @@ def test_hue_from_dict_builds_groups_with_ids():
     assert group.num_lights == 5
     assert group.active is False
     assert group.owner is None
-
-
-def test_execution_mode_preserves_values_added_by_new_firmware():
-    raw = _data()["execution"]
-    raw["mode"] = "futureMode"
-
-    execution = ExecutionData.from_dict(raw)
-
-    assert execution.mode.value == "futureMode"
-    assert execution.to_dict()["mode"] == "futureMode"
 
 
 def test_hdmi_and_behavior_parse_protocol_enums():

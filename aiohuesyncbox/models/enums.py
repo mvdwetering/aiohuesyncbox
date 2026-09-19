@@ -1,6 +1,11 @@
 """Enumerated values defined by the Sync Box API."""
 
+import logging
 from enum import IntEnum, StrEnum
+
+LOGGER = logging.getLogger(__name__)
+
+UNKNOWN_STRING = "-- UNKNOWN API VALUE --"
 
 
 class OpenStrEnum(StrEnum):
@@ -10,11 +15,8 @@ class OpenStrEnum(StrEnum):
     def _missing_(cls, value: object) -> "OpenStrEnum | None":
         if not isinstance(value, str):
             return None
-        member = str.__new__(cls, value)
-        member._name_ = value.upper()
-        member._value_ = value
-        cls._value2member_map_[value] = member
-        return member
+        LOGGER.warning("Unknown %s value received: %r", cls.__name__, value)
+        return cls.__members__["UNKNOWN_API_VALUE"]
 
 
 class WifiState(OpenStrEnum):
@@ -22,6 +24,9 @@ class WifiState(OpenStrEnum):
     DISCONNECTED = "disconnected"
     LAN = "lan"
     WAN = "wan"
+
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN"""
 
 
 class WifiStrength(IntEnum):
@@ -44,6 +49,9 @@ class DeviceAction(OpenStrEnum):
     FIRMWARE_UPDATE = "doFirmwareUpdate"
     CHECK_FOR_FIRMWARE_UPDATES = "checkForFirmwareUpdates"
 
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
+
 
 class ConnectionState(OpenStrEnum):
     UNINITIALIZED = "uninitialized"
@@ -55,11 +63,17 @@ class ConnectionState(OpenStrEnum):
     STREAMING = "streaming"
     BUSY = "busy"
 
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
+
 
 class OperatingMode(OpenStrEnum):
     UNINITIALIZED = "uninitialized"
     BRIDGE = "bridge"
     STANDALONE = "standalone"
+
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
 
 
 class ExecutionMode(OpenStrEnum):
@@ -69,11 +83,17 @@ class ExecutionMode(OpenStrEnum):
     GAME = "game"
     MUSIC = "music"
 
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
+
 
 class SyncMode(OpenStrEnum):
     VIDEO = "video"
     GAME = "game"
     MUSIC = "music"
+
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
 
 
 class HdmiSource(OpenStrEnum):
@@ -82,12 +102,18 @@ class HdmiSource(OpenStrEnum):
     INPUT3 = "input3"
     INPUT4 = "input4"
 
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
+
 
 class Intensity(OpenStrEnum):
     SUBTLE = "subtle"
     MODERATE = "moderate"
     HIGH = "high"
     INTENSE = "intense"
+
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
 
 
 class MusicPalette(OpenStrEnum):
@@ -97,10 +123,16 @@ class MusicPalette(OpenStrEnum):
     MELANCHOLIC_ENERGETIC = "melancholicEnergetic"
     NEUTRAL = "neutral"
 
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
+
 
 class CycleDirection(OpenStrEnum):
     NEXT = "next"
     PREVIOUS = "previous"
+
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
 
 
 class PortType(OpenStrEnum):
@@ -131,12 +163,18 @@ class PortType(OpenStrEnum):
     SPEAKER = "speaker"
     HDMI_SPLITTER = "hdmisplitter"
 
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
+
 
 class PortStatus(OpenStrEnum):
     UNPLUGGED = "unplugged"
     PLUGGED = "plugged"
     LINKED = "linked"
     UNKNOWN = "unknown"
+
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""
 
 
 class HdrMode(IntEnum):
@@ -148,3 +186,6 @@ class HdrMode(IntEnum):
 class RegistrationRole(OpenStrEnum):
     ADMIN = "admin"
     USER = "user"
+
+    UNKNOWN_API_VALUE = UNKNOWN_STRING
+    """Unknown string values in the enum are mapped to UNKNOWN_API_VALUE"""

@@ -77,7 +77,7 @@ class DeviceData(BaseModel):
     temperature: int | None = None
     """Indicates the current temperature of the HSB."""
     overheating: bool | None = None
-    """Indicates if the PSU voltage is too low. This is a critical error that should be displayed to user. Added in API level 10."""
+    """Indicates if the temperature of the device is too high. This is a critical error that should be displayed to user. Added in API level 10."""
     undervolt: bool | None = None
     """Indicates if the PSU voltage is too low. This is a critical error that should be displayed to user. Sync Box 8K only. Added in API level 14."""
     bluetooth: bool | None = None

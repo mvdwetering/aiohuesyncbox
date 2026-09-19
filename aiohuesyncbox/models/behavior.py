@@ -15,7 +15,7 @@ class InputBehavior(BaseModel):
     hdr_mode: HdrMode | None = None
     """HSB1 - HDR PQ compensation during Light Sync. 0 = Auto; 1 = Force SDR; 2 = Force HDR; Default 0. Sync Box 4K only."""
     hpd_input_port_switch: bool | None = None
-    """Automatically switch input when individual source is plugged in (or powered on)."""
+    """Automatically switch input when individual source is plugged in (or powered on). Added in API level 10."""
 
 
 @dataclass
@@ -28,6 +28,7 @@ class BehaviorUpdate(UpdateModel):
     hpd_input_switch: bool | None = None
     arc_bypass_mode: bool | None = None
     solo_mode: bool | None = None
+    """Added in API level 14."""
     force_dovi_native: bool | None = None
     input1: InputBehavior | None = None
     input2: InputBehavior | None = None
@@ -50,7 +51,7 @@ class BehaviorData(BaseModel):
     arc_bypass_mode: bool | None = None
     """Enable to make Sync Box's physical address transparent/invisible to source and TV. Must only be enabled when box is connected between an AVR and TV."""
     solo_mode: bool | None = None
-    """Enable when Sync Box input is connected to the secondary output of an AV receiver (HDMI splitter) and the output is not connected."""
+    """Enable when Sync Box input is connected to the secondary output of an AV receiver (HDMI splitter) and the output is not connected. Added in API level 14."""
     force_dovi_native: bool | None = None
     """HSB1 - When the TV advertises Dolby Vision force to use native mode. Sync Box 4K only."""
     input1: InputBehavior | None = None

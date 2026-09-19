@@ -76,7 +76,7 @@ class HueUpdate(UpdateModel):
     client_key: str | None = None
     """32 character ASCII hex representation of 16 byte client key needed for streaming to hue entertainment."""
     group_id: str | None = None
-    """Id of the currently selected entertainment area."""
+    """Id of the currently selected entertainment area. Added in API level 10."""
 
 
 @dataclass
@@ -89,15 +89,15 @@ class HueData(BaseModel):
     bridge_ip_address: str | None = None
     """Local IP address of the device."""
     operating_mode: OperatingMode | None = None
-    """Derived operating mode based on stored configuration. HSB2/HSB3/HSC1 only."""
+    """Derived operating mode based on stored configuration. HSB2/HSB3/HSC1 only. Added in API level 14."""
     group_id: str | None = None
-    """Id of the currently selected entertainment area."""
+    """Id of the currently selected entertainment area. Added in API level 10."""
     ble_connection_state: BleConnectionState | None = None
-    """BLE connection state object. HSB2/HSB3/HSC1 only."""
+    """BLE connection state object. HSB2/HSB3/HSC1 only. Added in API level 14."""
     ble_entertainment_lights: list[BleEntertainmentLightItem] = field(
         default_factory=list
     )
-    """Array of provisioned BLE entertainment lights. HSB2/HSB3/HSC1 only."""
+    """Array of provisioned BLE entertainment lights. HSB2/HSB3/HSC1 only. Added in API level 14."""
     groups: dict[str, Group] = field(default_factory=dict)
     """Entertainment areas keyed by API id."""
 

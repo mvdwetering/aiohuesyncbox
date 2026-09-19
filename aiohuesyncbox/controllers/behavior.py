@@ -25,6 +25,14 @@ class Behavior(Resource[BehaviorData]):
         return self._data.hpd_input_switch
 
     @property
+    def arc_bypass_mode(self) -> bool | None:
+        return self._data.arc_bypass_mode
+
+    @property
+    def solo_mode(self) -> bool | None:
+        return self._data.solo_mode
+
+    @property
     def force_dovi_native(self) -> bool | None:
         return self._data.force_dovi_native
 
@@ -45,5 +53,8 @@ class Behavior(Resource[BehaviorData]):
         return self._data.input4
 
     async def set_force_dovi_native(self, enabled: bool) -> None:
-        """Force DolbyVision compatibility of huesyncbox on or off."""
+        """
+        Force DolbyVision compatibility of huesyncbox on or off.
+        Only available on Hue Syncbox (the original Sync Box model).
+        """
         await self._put(BehaviorUpdate(force_dovi_native=enabled).to_dict())

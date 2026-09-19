@@ -74,9 +74,11 @@ class DeviceData(BaseModel):
     update: DeviceAutoUpdate | None = None
     action: DeviceAction | None = None
     pushlink: str | None = None
+    temperature: int | None = None
+    """Indicates the current temperature of the HSB."""
     overheating: bool | None = None
-    """Critical power-supply voltage warning reported by the Sync Box."""
+    """Indicates if the PSU voltage is too low. This is a critical error that should be displayed to user."""
     undervolt: bool | None = None
-    """Critical power-supply voltage warning reported by the Sync Box."""
+    """Indicates if the PSU voltage is too low. This is a critical error that should be displayed to user. Sync Box 8K only."""
     bluetooth: bool | None = None
     capabilities: DeviceCapabilities | None = None

@@ -4,7 +4,7 @@ from enum import IntEnum, StrEnum
 
 
 class OpenStrEnum(StrEnum):
-    """String enum that preserves values added by later firmware releases."""
+    """String enum that preserves unrecognized string values."""
 
     @classmethod
     def _missing_(cls, value: object) -> "OpenStrEnum | None":
@@ -38,10 +38,11 @@ class LedMode(IntEnum):
     DIMMED = 2
 
 
-class DeviceAction(StrEnum):
+class DeviceAction(OpenStrEnum):
     NONE = "none"
     SOFTWARE_RESTART = "doSoftwareRestart"
     FIRMWARE_UPDATE = "doFirmwareUpdate"
+    CHECK_FOR_FIRMWARE_UPDATES = "checkForFirmwareUpdates"
 
 
 class ConnectionState(StrEnum):
@@ -55,20 +56,24 @@ class ConnectionState(StrEnum):
     BUSY = "busy"
 
 
+class OperatingMode(OpenStrEnum):
+    UNINITIALIZED = "uninitialized"
+    BRIDGE = "bridge"
+    STANDALONE = "standalone"
+
+
 class ExecutionMode(OpenStrEnum):
     POWERSAVE = "powersave"
     PASSTHROUGH = "passthrough"
     VIDEO = "video"
     GAME = "game"
     MUSIC = "music"
-    AMBIENT = "ambient"
 
 
 class SyncMode(StrEnum):
     VIDEO = "video"
     GAME = "game"
     MUSIC = "music"
-    AMBIENT = "ambient"
 
 
 class HdmiSource(StrEnum):
@@ -98,7 +103,7 @@ class CycleDirection(StrEnum):
     PREVIOUS = "previous"
 
 
-class PortType(StrEnum):
+class PortType(OpenStrEnum):
     GENERIC = "generic"
     VIDEO = "video"
     GAME = "game"
@@ -120,9 +125,14 @@ class PortType(StrEnum):
     AV_RECEIVER = "avreceiver"
     SOUND_BAR = "soundbar"
     HDMI_SWITCH = "hdmiswitch"
+    TV = "tv"
+    MONITOR = "monitor"
+    BEAMER = "beamer"
+    SPEAKER = "speaker"
+    HDMI_SPLITTER = "hdmisplitter"
 
 
-class PortStatus(StrEnum):
+class PortStatus(OpenStrEnum):
     UNPLUGGED = "unplugged"
     PLUGGED = "plugged"
     LINKED = "linked"

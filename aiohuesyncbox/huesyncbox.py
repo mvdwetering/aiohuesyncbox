@@ -28,9 +28,12 @@ from .models import (
 from .errors import raise_error, RequestError, Unauthorized
 from .hsb_cacert import HSB_CACERT
 
+# Minimum API level required for this library
+# This is also the minimum supported mentioned in the API docs.
 MIN_API_LEVEL = 7
 
 logger = logging.getLogger(__name__)
+
 
 class HueSyncDevice:
     """Control a Philips Hue Play Sync device."""
@@ -159,7 +162,9 @@ class HueSyncDevice:
                 if "behavior" in response
                 else None
             )
-            self.device = Device(DeviceData.from_dict(response["device"]), self._request)
+            self.device = Device(
+                DeviceData.from_dict(response["device"]), self._request
+            )
             self.execution = Execution(
                 ExecutionData.from_dict(response["execution"]), self._request
             )
@@ -227,8 +232,10 @@ class HueSyncDevice:
             logger.debug(err, exc_info=True)
             raise RequestError(f"Timeout requesting data from {self._host}") from err
 
+
 class HueSyncBox(HueSyncDevice):
     """Control a Philips Hue Play HDMI Sync Box."""
+
 
 def _raise_on_error(data: dict) -> None:
     """Check response for error message."""

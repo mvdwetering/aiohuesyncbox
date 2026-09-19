@@ -15,7 +15,7 @@ class Presets(CollectionResource[Preset]):
         response = await self._request(
             "post", self._path, PresetCreate(name=name, execution=execution).to_dict()
         )
-        return response.get("id") if response else None
+        return response.get("presetId") or response.get("id") if response else None
 
     async def set(
         self,

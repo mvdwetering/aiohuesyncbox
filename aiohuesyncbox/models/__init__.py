@@ -16,6 +16,11 @@ from .execution import MusicMode as MusicMode
 from .execution import ExecutionData as ExecutionData
 from .execution import ExecutionUpdate as ExecutionUpdate
 
+from .hue import BleConnectionState as BleConnectionState
+from .hue import BleEntertainmentLightItem as BleEntertainmentLightItem
+from .hue import BleEntertainmentLightItemWrite as BleEntertainmentLightItemWrite
+from .hue import BleLightRead as BleLightRead
+from .hue import BleLightWrite as BleLightWrite
 from .hue import Group as Group
 from .hue import HueData as HueData
 from .hue import GroupUpdate as GroupUpdate
@@ -54,6 +59,7 @@ from .enums import HdrMode as HdrMode
 from .enums import Intensity as Intensity
 from .enums import LedMode as LedMode
 from .enums import MusicPalette as MusicPalette
+from .enums import OperatingMode as OperatingMode
 from .enums import PortStatus as PortStatus
 from .enums import PortType as PortType
 from .enums import RegistrationRole as RegistrationRole

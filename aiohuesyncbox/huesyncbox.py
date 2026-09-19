@@ -211,7 +211,6 @@ class HueSyncDevice:
                 json=data,
                 headers=headers,
                 server_hostname=self._id,
-                ssl=False,
             ) as resp:
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug("%s, %s", resp.status, await resp.text("utf-8"))

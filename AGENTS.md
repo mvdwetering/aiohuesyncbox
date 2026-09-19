@@ -58,6 +58,7 @@ ruff format aiohuesyncbox  # Auto-format
 
 ## Conventions
 
+- **String enums**: All StrEnums should be OpenStrEnums.
 - **Mashumaro metadata**: Use `BaseModel.__pre_deserialize__` / `__post_serialize__` hooks in model definitions for field name mapping (camelCase JSON ↔ snake_case Python).
 - **Instances vs class attrs**: Non-JSON runtime attributes (e.g., `_request` callable, resource id) must be assigned in `__post_init__` as instance attributes, not ClassVar, to avoid mashumaro serialization issues.
 - **Property delegation**: All `Resource` subclass fields must be exposed as `@property` methods with correct type annotations matching the model. Go-to-definition IDE support depends on real properties, not stubs.

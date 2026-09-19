@@ -15,6 +15,9 @@ from .controllers import Ir as Ir
 from .controllers import Registrations as Registrations
 from .controllers import Presets as Presets
 
+from .models import BleConnectionState as BleConnectionState
+from .models import BleEntertainmentLightItem as BleEntertainmentLightItem
+from .models import BleLightRead as BleLightRead
 from .models import Wifi as Wifi
 from .models import DeviceCapabilities as DeviceCapabilities
 from .models import DeviceUpdate as DeviceUpdate
@@ -43,12 +46,16 @@ from .models import PortStatus as PortStatus
 from .models import PortType as PortType
 from .models import RegistrationRole as RegistrationRole
 from .models import SyncMode as SyncMode
+from .models import OperatingMode as OperatingMode
 from .models import WifiState as WifiState
 from .models import WifiStrength as WifiStrength
 
 __all__ = [
     "AiohuesyncboxException",
     "Behavior",
+    "BleConnectionState",
+    "BleEntertainmentLightItem",
+    "BleLightRead",
     "ConnectionState",
     "CycleDirection",
     "Device",
@@ -75,6 +82,7 @@ __all__ = [
     "MusicMode",
     "MusicPalette",
     "Output",
+    "OperatingMode",
     "PortStatus",
     "PortType",
     "Preset",

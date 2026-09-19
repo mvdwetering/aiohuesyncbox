@@ -21,6 +21,8 @@ class Registration(BaseModel):
     last_used: str
     """UTC ISO 8601 timestamp at which the registration was last used."""
     role: RegistrationRole
+    verified: bool | None = None
+    """Whether this registration has a verified name. Added in API level 10."""
     id: str = field(default="", compare=False, metadata={"serialize": "omit"})
     """Registration id derived from the containing registrations map key."""
 

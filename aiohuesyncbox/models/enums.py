@@ -4,7 +4,7 @@ from enum import IntEnum, StrEnum
 
 
 class OpenStrEnum(StrEnum):
-    """String enum that preserves values added by later firmware releases."""
+    """String enum that preserves unrecognized string values."""
 
     @classmethod
     def _missing_(cls, value: object) -> "OpenStrEnum | None":
@@ -17,7 +17,7 @@ class OpenStrEnum(StrEnum):
         return member
 
 
-class WifiState(StrEnum):
+class WifiState(OpenStrEnum):
     UNINITIALIZED = "uninitialized"
     DISCONNECTED = "disconnected"
     LAN = "lan"
@@ -38,13 +38,14 @@ class LedMode(IntEnum):
     DIMMED = 2
 
 
-class DeviceAction(StrEnum):
+class DeviceAction(OpenStrEnum):
     NONE = "none"
     SOFTWARE_RESTART = "doSoftwareRestart"
     FIRMWARE_UPDATE = "doFirmwareUpdate"
+    CHECK_FOR_FIRMWARE_UPDATES = "checkForFirmwareUpdates"
 
 
-class ConnectionState(StrEnum):
+class ConnectionState(OpenStrEnum):
     UNINITIALIZED = "uninitialized"
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
@@ -55,37 +56,41 @@ class ConnectionState(StrEnum):
     BUSY = "busy"
 
 
+class OperatingMode(OpenStrEnum):
+    UNINITIALIZED = "uninitialized"
+    BRIDGE = "bridge"
+    STANDALONE = "standalone"
+
+
 class ExecutionMode(OpenStrEnum):
     POWERSAVE = "powersave"
     PASSTHROUGH = "passthrough"
     VIDEO = "video"
     GAME = "game"
     MUSIC = "music"
-    AMBIENT = "ambient"
 
 
-class SyncMode(StrEnum):
+class SyncMode(OpenStrEnum):
     VIDEO = "video"
     GAME = "game"
     MUSIC = "music"
-    AMBIENT = "ambient"
 
 
-class HdmiSource(StrEnum):
+class HdmiSource(OpenStrEnum):
     INPUT1 = "input1"
     INPUT2 = "input2"
     INPUT3 = "input3"
     INPUT4 = "input4"
 
 
-class Intensity(StrEnum):
+class Intensity(OpenStrEnum):
     SUBTLE = "subtle"
     MODERATE = "moderate"
     HIGH = "high"
     INTENSE = "intense"
 
 
-class MusicPalette(StrEnum):
+class MusicPalette(OpenStrEnum):
     HAPPY_ENERGETIC = "happyEnergetic"
     HAPPY_CALM = "happyCalm"
     MELANCHOLIC_CALM = "melancholicCalm"
@@ -93,12 +98,12 @@ class MusicPalette(StrEnum):
     NEUTRAL = "neutral"
 
 
-class CycleDirection(StrEnum):
+class CycleDirection(OpenStrEnum):
     NEXT = "next"
     PREVIOUS = "previous"
 
 
-class PortType(StrEnum):
+class PortType(OpenStrEnum):
     GENERIC = "generic"
     VIDEO = "video"
     GAME = "game"
@@ -120,9 +125,14 @@ class PortType(StrEnum):
     AV_RECEIVER = "avreceiver"
     SOUND_BAR = "soundbar"
     HDMI_SWITCH = "hdmiswitch"
+    TV = "tv"
+    MONITOR = "monitor"
+    BEAMER = "beamer"
+    SPEAKER = "speaker"
+    HDMI_SPLITTER = "hdmisplitter"
 
 
-class PortStatus(StrEnum):
+class PortStatus(OpenStrEnum):
     UNPLUGGED = "unplugged"
     PLUGGED = "plugged"
     LINKED = "linked"
@@ -135,6 +145,6 @@ class HdrMode(IntEnum):
     FORCE_HDR = 2
 
 
-class RegistrationRole(StrEnum):
+class RegistrationRole(OpenStrEnum):
     ADMIN = "admin"
     USER = "user"

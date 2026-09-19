@@ -81,6 +81,10 @@ class Device(Resource[DeviceData]):
         return self._data.pushlink
 
     @property
+    def temperature(self) -> int | None:
+        return self._data.temperature
+
+    @property
     def overheating(self) -> bool | None:
         return self._data.overheating
 

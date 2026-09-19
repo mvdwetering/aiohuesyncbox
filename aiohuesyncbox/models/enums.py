@@ -17,7 +17,7 @@ class OpenStrEnum(StrEnum):
         return member
 
 
-class WifiState(StrEnum):
+class WifiState(OpenStrEnum):
     UNINITIALIZED = "uninitialized"
     DISCONNECTED = "disconnected"
     LAN = "lan"
@@ -45,7 +45,7 @@ class DeviceAction(OpenStrEnum):
     CHECK_FOR_FIRMWARE_UPDATES = "checkForFirmwareUpdates"
 
 
-class ConnectionState(StrEnum):
+class ConnectionState(OpenStrEnum):
     UNINITIALIZED = "uninitialized"
     DISCONNECTED = "disconnected"
     CONNECTING = "connecting"
@@ -70,27 +70,27 @@ class ExecutionMode(OpenStrEnum):
     MUSIC = "music"
 
 
-class SyncMode(StrEnum):
+class SyncMode(OpenStrEnum):
     VIDEO = "video"
     GAME = "game"
     MUSIC = "music"
 
 
-class HdmiSource(StrEnum):
+class HdmiSource(OpenStrEnum):
     INPUT1 = "input1"
     INPUT2 = "input2"
     INPUT3 = "input3"
     INPUT4 = "input4"
 
 
-class Intensity(StrEnum):
+class Intensity(OpenStrEnum):
     SUBTLE = "subtle"
     MODERATE = "moderate"
     HIGH = "high"
     INTENSE = "intense"
 
 
-class MusicPalette(StrEnum):
+class MusicPalette(OpenStrEnum):
     HAPPY_ENERGETIC = "happyEnergetic"
     HAPPY_CALM = "happyCalm"
     MELANCHOLIC_CALM = "melancholicCalm"
@@ -98,7 +98,7 @@ class MusicPalette(StrEnum):
     NEUTRAL = "neutral"
 
 
-class CycleDirection(StrEnum):
+class CycleDirection(OpenStrEnum):
     NEXT = "next"
     PREVIOUS = "previous"
 
@@ -145,6 +145,6 @@ class HdrMode(IntEnum):
     FORCE_HDR = 2
 
 
-class RegistrationRole(StrEnum):
+class RegistrationRole(OpenStrEnum):
     ADMIN = "admin"
     USER = "user"
